@@ -4,11 +4,13 @@ extends Node2D
 const GRID_COLS := 3
 const GRID_ROWS := 2
 const START_LIVES := 3
-const LEVEL2_SCORE := 1500
+const LEVEL_DURATION := 120.0      # seconds per level
+const MAX_LEVEL := 10              # 10 levels x 2 min = 20 min campaign
 const HOLE_MOVE_AMPLITUDE := 70.0
-const HOLE_MOVE_SPEED := 1.6
+const LEADERBOARD_PATH := "user://leaderboard.json"
+const LEADERBOARD_SIZE := 10
 
-enum GameState { MENU, PLAYING, GAME_OVER }
+enum GameState { MENU, PLAYING, GAME_OVER, VICTORY }
 
 var game_state: int = GameState.MENU
 var score := 0
@@ -18,6 +20,7 @@ var high_score := 0
 var elapsed := 0.0
 var spawn_timer := 0.0
 var level := 1
+var leaderboard: Array = []  # [{name, score, level}]
 
 var holes: Array[Hole] = []
 var hole_base_pos: Array[Vector2] = []
@@ -43,8 +46,14 @@ var voice: VoiceBox
 @onready var level_label: Label = %LevelLabel
 @onready var subtitle_label: Label = %SubtitleLabel
 @onready var coin_label: Label = %CoinLabel
+@onready var timer_label: Label = %TimerLabel
+@onready var board_menu_label: Label = %BoardMenuLabel
+@onready var board_over_label: Label = %BoardOverLabel
+@onready var name_edit: LineEdit = %NameEdit
+@onready var name_row: Control = %NameRow
 
 func _ready() -> void:
+	_load_leaderboard()
 	_build_background()
 	_build_holes()
 	# Hammer lives on its own CanvasLayer above all UI (layer > UI's default 1).
@@ -60,7 +69,10 @@ func _ready() -> void:
 	game_over_panel.visible = false
 	%StartButton.pressed.connect(_start_game)
 	%RetryButton.pressed.connect(_start_game)
+	%SubmitButton.pressed.connect(_submit_score)
+	name_edit.text_submitted.connect(func(_t): _submit_score())
 	_blink_coin_label()
+	_refresh_board_labels()
 	_update_hud()
 
 func _blink_coin_label() -> void:
@@ -78,6 +90,9 @@ func _build_holes() -> void:
 		for c in GRID_COLS:
 			var hole := Hole.new()
 			hole.position = Vector2(240 + c * 240, 280 + r * 210)
+			# Lower rows render in front so their reporters aren't hidden
+			# behind podiums of the row above.
+			hole.z_index = r * 10
 			hole.whacked.connect(_on_whacked)
 			hole.question_asked.connect(_on_question_asked)
 			add_child(hole)
@@ -109,23 +124,47 @@ func _process(delta: float) -> void:
 	if spawn_timer <= 0.0:
 		_spawn_reporter()
 		spawn_timer = _spawn_interval()
-	if level == 1 and score >= LEVEL2_SCORE:
-		_enter_level2()
+	var new_level := mini(int(elapsed / LEVEL_DURATION) + 1, MAX_LEVEL)
+	if new_level > level:
+		_enter_level(new_level)
 	if level >= 2:
 		_move_holes(delta)
+	if elapsed >= LEVEL_DURATION * MAX_LEVEL:
+		_victory()
+	_update_timer()
 
-func _enter_level2() -> void:
-	level = 2
-	voice.say("prez_level2")
-	_spawn_banner("LEVEL 2 — THEY'RE MOVING!")
+func _enter_level(new_level: int) -> void:
+	level = new_level
+	lives = mini(lives + 1, START_LIVES + 2)  # small approval bonus per term stage
+	match level:
+		2:
+			voice.say("prez_level2")
+			_spawn_banner("LEVEL 2 — THEY'RE MOVING!")
+		5:
+			_spawn_banner("LEVEL 5 — MIDTERMS! FASTER!")
+			voice.say("prez_taunt1")
+		MAX_LEVEL:
+			_spawn_banner("FINAL LEVEL — LAME DUCK FURY!")
+			voice.say("prez_taunt1")
+		_:
+			_spawn_banner("LEVEL %d" % level)
+	_play("start")
 	_update_hud()
+
+func _hole_move_speed() -> float:
+	# Ramps from 1.2 at level 2 up to ~3.2 at level 10.
+	return 1.2 + (level - 2) * 0.25
 
 func _move_holes(_delta: float) -> void:
 	for i in holes.size():
 		var phase := float(i) * 1.1
 		var dir := 1.0 if i % 2 == 0 else -1.0
 		holes[i].position.x = hole_base_pos[i].x \
-			+ dir * sin(elapsed * HOLE_MOVE_SPEED + phase) * HOLE_MOVE_AMPLITUDE
+			+ dir * sin(elapsed * _hole_move_speed() + phase) * HOLE_MOVE_AMPLITUDE
+		# From level 6 the podiums also bob vertically.
+		if level >= 6:
+			holes[i].position.y = hole_base_pos[i].y \
+				+ cos(elapsed * _hole_move_speed() * 0.7 + phase) * 25.0
 
 func _spawn_banner(text: String) -> void:
 	var lbl := Label.new()
@@ -148,12 +187,14 @@ func _spawn_banner(text: String) -> void:
 	tw.tween_callback(lbl.queue_free)
 
 func _spawn_interval() -> float:
-	# Gets faster over time: 1.5s -> 0.55s
-	return max(0.55, 1.5 - elapsed * 0.02) * randf_range(0.8, 1.2)
+	# Per-level ramp: 1.5s at level 1 down to 0.5s at level 10.
+	var t := float(level - 1) / float(MAX_LEVEL - 1)
+	return lerpf(1.5, 0.5, t) * randf_range(0.8, 1.2)
 
 func _question_time() -> float:
-	# Reporters ask faster over time: 2.4s -> 1.0s
-	return max(1.0, 2.4 - elapsed * 0.025)
+	# Reporters ask faster per level: 2.6s -> 1.0s.
+	var t := float(level - 1) / float(MAX_LEVEL - 1)
+	return lerpf(2.6, 1.0, t)
 
 func _spawn_reporter() -> void:
 	var free := holes.filter(func(h): return not h.is_busy())
@@ -203,19 +244,90 @@ func _on_question_asked(_hole: Hole) -> void:
 
 func _game_over() -> void:
 	game_state = GameState.GAME_OVER
+	_end_round("IMPEACHED!", "Too many serious questions were asked.")
+	_play("fail")
+	voice.say("prez_over")
+
+func _victory() -> void:
+	game_state = GameState.VICTORY
+	score += 5000  # term-completion bonus
+	_end_round("RE-ELECTED!", "You survived the full 20-minute term!")
+	_play("start")
+	voice.say("prez_taunt1")
+
+func _end_round(title: String, sub: String) -> void:
 	high_score = max(high_score, score)
 	for h in holes:
 		h.force_sink()
-	_play("fail")
-	voice.say("prez_over")
-	final_label.text = "FINAL SCORE %06d\nBEST %06d" % [score, high_score]
+	%OverTitle.text = title
+	%OverSub.text = sub
+	final_label.text = "FINAL SCORE %06d" % score
+	name_row.visible = _qualifies_for_board(score)
+	name_edit.text = ""
+	if name_row.visible:
+		name_edit.grab_focus()
+	_refresh_board_labels()
 	game_over_panel.visible = true
+
+# --- Leaderboard -----------------------------------------------------------
+
+func _load_leaderboard() -> void:
+	leaderboard = []
+	if FileAccess.file_exists(LEADERBOARD_PATH):
+		var f := FileAccess.open(LEADERBOARD_PATH, FileAccess.READ)
+		var data: Variant = JSON.parse_string(f.get_as_text())
+		if data is Array:
+			leaderboard = data
+
+func _save_leaderboard() -> void:
+	var f := FileAccess.open(LEADERBOARD_PATH, FileAccess.WRITE)
+	f.store_string(JSON.stringify(leaderboard))
+
+func _qualifies_for_board(s: int) -> bool:
+	if s <= 0:
+		return false
+	if leaderboard.size() < LEADERBOARD_SIZE:
+		return true
+	return s > int(leaderboard[-1]["score"])
+
+func add_leaderboard_entry(entry_name: String, s: int, lvl: int) -> void:
+	entry_name = entry_name.strip_edges().to_upper().substr(0, 3)
+	if entry_name.is_empty():
+		entry_name = "AAA"
+	leaderboard.append({"name": entry_name, "score": s, "level": lvl})
+	leaderboard.sort_custom(func(a, b): return int(a["score"]) > int(b["score"]))
+	if leaderboard.size() > LEADERBOARD_SIZE:
+		leaderboard.resize(LEADERBOARD_SIZE)
+	_save_leaderboard()
+
+func _submit_score() -> void:
+	add_leaderboard_entry(name_edit.text, score, level)
+	name_row.visible = false
+	_play("tick")
+	_refresh_board_labels()
+
+func _board_text() -> String:
+	if leaderboard.is_empty():
+		return "— HIGH SCORES —\n(no entries yet)"
+	var lines := ["— HIGH SCORES —"]
+	for i in leaderboard.size():
+		var e: Dictionary = leaderboard[i]
+		lines.append("%2d. %-3s  %06d  LV%d" % [i + 1, e["name"], int(e["score"]), int(e["level"])])
+	return "\n".join(lines)
+
+func _refresh_board_labels() -> void:
+	board_menu_label.text = _board_text()
+	board_over_label.text = _board_text()
+
+func _update_timer() -> void:
+	var remaining: float = maxf(0.0, LEVEL_DURATION * MAX_LEVEL - elapsed)
+	timer_label.text = "TERM %02d:%02d" % [int(remaining) / 60, int(remaining) % 60]
 
 func _update_hud() -> void:
 	score_label.text = "SCORE %06d" % score
-	lives_label.text = "APPROVAL " + "❤".repeat(max(0, lives)) + "♡".repeat(START_LIVES - max(0, lives))
+	lives_label.text = "APPROVAL " + "❤".repeat(max(0, lives)) + "♡".repeat(maxi(0, START_LIVES - max(0, lives)))
 	combo_label.text = "COMBO x%d" % combo if combo > 1 else ""
-	level_label.text = "LEVEL %d" % level
+	level_label.text = "LEVEL %d/%d" % [level, MAX_LEVEL]
 
 func _spawn_score_popup(pos: Vector2, text: String) -> void:
 	var lbl := Label.new()

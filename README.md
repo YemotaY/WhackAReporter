@@ -14,9 +14,12 @@ your gavel before their question ring fills up, or your approval drops!
 
 - **Hit a reporter** before the `?` ring around their speech bubble fills: `+100 × combo`.
 - **Miss a swing** and your combo resets.
-- **Let a question finish** and you lose one ❤ Approval. Three questions = **IMPEACHED!**
-- Reach **1500 points** to enter **Level 2**, where the podiums start moving.
-- Difficulty ramps continuously: reporters spawn faster and ask faster.
+- **Let a question finish** and you lose one ❤ Approval. Run out = **IMPEACHED!**
+- **10 levels, 2 minutes each** — survive the full **20-minute term** to get **RE-ELECTED** (+5000 bonus).
+  - Level 2+: podiums slide sideways (faster every level)
+  - Level 6+: podiums also bob vertically
+  - Each new level restores one ❤ Approval (max 5)
+- **Local leaderboard**: top-10 arcade high scores with 3-letter initials, saved to `user://leaderboard.json`.
 
 ## Run
 
@@ -42,7 +45,7 @@ assets/
   voice/                 voice clips + retro babble placeholders (WAV)
 scenes/main.tscn         main scene (game + UI)
 scripts/
-  main.gd                game loop, levels, score, spawning, HUD
+  main.gd                game loop, levels, score, spawning, leaderboard, HUD
   hole.gd                podium: pop-up/sink animation, question timer, hit box
   reporter.gd            procedurally drawn reporter (random suits/hair)
   hammer.gd              gavel mouse cursor with swing animation

@@ -61,6 +61,18 @@ theme_override_constants/outline_size = 5
 horizontal_alignment = 1
 text = "LEVEL 1"
 
+[node name="TimerLabel" type="Label" parent="UI"]
+unique_name_in_owner = true
+offset_left = 20.0
+offset_top = 46.0
+offset_right = 320.0
+offset_bottom = 80.0
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(0.6, 0.85, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+text = "TERM 20:00"
+
 [node name="SubtitleLabel" type="Label" parent="UI"]
 unique_name_in_owner = true
 offset_left = 40.0
@@ -80,10 +92,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -260.0
-offset_top = -150.0
-offset_right = 260.0
-offset_bottom = 150.0
+offset_left = -290.0
+offset_top = -260.0
+offset_right = 290.0
+offset_bottom = 260.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -109,7 +121,8 @@ autowrap_mode = 2
 text = "You are da Präsident. Reporters keep popping up
 with serious questions. Bonk them with your gavel
 before the question ring fills up — or lose approval!
-Score 1500 to reach LEVEL 2: moving podiums!"
+Survive the full 20-minute term to get RE-ELECTED.
+New level every 2 minutes — podiums start moving at level 2!"
 
 [node name="StartButton" type="Button" parent="UI/MenuPanel/VBox"]
 unique_name_in_owner = true
@@ -126,6 +139,14 @@ theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
 horizontal_alignment = 1
 text = "● INSERT COIN ●"
 
+[node name="BoardMenuLabel" type="Label" parent="UI/MenuPanel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.6, 1, 0.7, 1)
+horizontal_alignment = 1
+text = "— HIGH SCORES —"
+
 [node name="GameOverPanel" type="PanelContainer" parent="UI"]
 unique_name_in_owner = true
 visible = false
@@ -134,19 +155,20 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -230.0
-offset_top = -140.0
-offset_right = 230.0
-offset_bottom = 140.0
+offset_left = -270.0
+offset_top = -270.0
+offset_right = 270.0
+offset_bottom = 270.0
 grow_horizontal = 2
 grow_vertical = 2
 
 [node name="VBox" type="VBoxContainer" parent="UI/GameOverPanel"]
 layout_mode = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 12
 alignment = 1
 
-[node name="Title" type="Label" parent="UI/GameOverPanel/VBox"]
+[node name="OverTitle" type="Label" parent="UI/GameOverPanel/VBox"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 36
 theme_override_colors/font_color = Color(1, 0.3, 0.25, 1)
@@ -155,7 +177,8 @@ theme_override_constants/outline_size = 8
 horizontal_alignment = 1
 text = "IMPEACHED!"
 
-[node name="Sub" type="Label" parent="UI/GameOverPanel/VBox"]
+[node name="OverSub" type="Label" parent="UI/GameOverPanel/VBox"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 horizontal_alignment = 1
@@ -167,6 +190,39 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 24
 horizontal_alignment = 1
 text = "Final Score: 0"
+
+[node name="NameRow" type="HBoxContainer" parent="UI/GameOverPanel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 10
+
+[node name="NameHint" type="Label" parent="UI/GameOverPanel/VBox/NameRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "INITIALS:"
+
+[node name="NameEdit" type="LineEdit" parent="UI/GameOverPanel/VBox/NameRow"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(90, 0)
+theme_override_font_sizes/font_size = 20
+max_length = 3
+placeholder_text = "AAA"
+
+[node name="SubmitButton" type="Button" parent="UI/GameOverPanel/VBox/NameRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = " OK "
+
+[node name="BoardOverLabel" type="Label" parent="UI/GameOverPanel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.6, 1, 0.7, 1)
+horizontal_alignment = 1
+text = "— HIGH SCORES —"
 
 [node name="RetryButton" type="Button" parent="UI/GameOverPanel/VBox"]
 unique_name_in_owner = true

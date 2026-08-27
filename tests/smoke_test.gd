@@ -56,9 +56,9 @@ func _initialize() -> void:
 	main._start_game()
 	assert(main.game_state == main.GameState.PLAYING and main.lives == 3, "restart ok")
 
-	# Level 2: moving holes
+	# Level 2: time-based, holes move
 	assert(main.level == 1, "starts at level 1")
-	main.score = main.LEVEL2_SCORE
+	main.elapsed = main.LEVEL_DURATION + 0.1
 	await process_frame
 	await process_frame
 	assert(main.level == 2, "should be level 2")
@@ -66,10 +66,30 @@ func _initialize() -> void:
 	await create_timer(0.5).timeout
 	assert(absf(main.holes[0].position.x - x_before) > 1.0, "holes should move in level 2")
 
+	# Z-order: bottom row must render in front of top row
+	assert(main.holes[3].z_index > main.holes[0].z_index, "bottom row in front")
+
 	# Voice system wired
 	assert(main.voice != null and main.voice.subtitle_label != null, "voice box wired")
 	main.voice.say("prez_whack1")
 	assert(main.subtitle_label.text != "", "subtitle shown")
+
+	# Leaderboard
+	main.leaderboard = []
+	main.add_leaderboard_entry("zz", 500, 2)
+	main.add_leaderboard_entry("aaa", 900, 3)
+	assert(main.leaderboard[0]["name"] == "AAA" and int(main.leaderboard[0]["score"]) == 900, "sorted board")
+	assert(main.leaderboard[1]["name"] == "ZZ", "uppercased name")
+	assert(main._qualifies_for_board(1) == true, "qualifies when board not full")
+	main._load_leaderboard()
+	assert(main.leaderboard.size() >= 2, "leaderboard persisted to disk")
+
+	# Victory path
+	main.elapsed = main.LEVEL_DURATION * main.MAX_LEVEL + 0.1
+	await process_frame
+	await process_frame
+	assert(main.game_state == main.GameState.VICTORY, "should reach victory after full term")
+	assert(main.game_over_panel.visible, "end panel visible on victory")
 
 	print("ALL SMOKE TESTS PASSED")
 	quit(0)

@@ -20,7 +20,7 @@ var _bubble: Node2D
 var _tween: Tween
 
 func _ready() -> void:
-	z_index = 0
+	# Note: z_index is assigned per-row by main.gd so lower rows render in front.
 	# Reporter, clipped between back and front of the hole.
 	_reporter = Reporter.new()
 	_reporter.position = Vector2(0, DOWN_Y)
