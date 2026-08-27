@@ -2,11 +2,9 @@
 
 > **Bonk the press. Dodge the questions. Get re-elected.**
 
-<div style="text-align: center;">
-  
+<p align="center">
   ● INSERT COIN ●
-
-</div>
+</p>
 
 ---
 
