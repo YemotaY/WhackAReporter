@@ -1,10 +1,9 @@
 # 🔨 WHACK-A-REPORTER
-
+<p align="center">
+  
 > **Bonk the press. Dodge the questions. Get re-elected.**
 
-<p align="center">
   ● INSERT COIN ●
-</p>
 
 ---
 
@@ -44,3 +43,4 @@ approval rating tanks. Survive the full 20-minute term to get **RE-ELECTED**.
 
 *A satirical arcade game by [YemotaY](https://github.com/YemotaY) · Made with Godot ·
 Any resemblance to real presidents is tremendous coincidence.*
+</p>
