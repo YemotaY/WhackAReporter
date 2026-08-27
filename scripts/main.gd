@@ -9,6 +9,9 @@ const MAX_LEVEL := 10              # 10 levels x 2 min = 20 min campaign
 const HOLE_MOVE_AMPLITUDE := 70.0
 const LEADERBOARD_PATH := "user://leaderboard.json"
 const LEADERBOARD_SIZE := 10
+const URL_GITHUB := "https://github.com/YemotaY/WhackAReporter"
+const URL_ITCH := "https://yemotay.itch.io/whack-a-reporter"
+const URL_PAYPAL := "https://www.paypal.me/YemotaY"
 
 enum GameState { MENU, PLAYING, GAME_OVER, VICTORY }
 
@@ -21,6 +24,9 @@ var elapsed := 0.0
 var spawn_timer := 0.0
 var level := 1
 var leaderboard: Array = []  # [{name, score, level}]
+var heard_qa := {}          # qa_id -> true, once its question played fully
+var arcade_mode := false    # true after every Q&A has been heard once
+var vocal_timer := 0.0      # background vocal replay countdown (arcade mode)
 
 var holes: Array[Hole] = []
 var hole_base_pos: Array[Vector2] = []
@@ -73,8 +79,28 @@ func _ready() -> void:
 	%SubmitButton.pressed.connect(_submit_score)
 	name_edit.text_submitted.connect(func(_t): _submit_score())
 	_blink_coin_label()
+	_build_link_buttons()
 	_refresh_board_labels()
 	_update_hud()
+
+func _build_link_buttons() -> void:
+	for panel: Control in [menu_panel, game_over_panel]:
+		var vbox: VBoxContainer = panel.get_node("VBox")
+		var row := HBoxContainer.new()
+		row.alignment = BoxContainer.ALIGNMENT_CENTER
+		row.add_theme_constant_override("separation", 12)
+		vbox.add_child(row)
+		for entry in [
+			["\u2b50 GitHub", URL_GITHUB],
+			["\U0001F3AE itch.io", URL_ITCH],
+			["\u2764 Donate", URL_PAYPAL],
+		]:
+			var btn := Button.new()
+			btn.text = " %s " % entry[0]
+			btn.add_theme_font_size_override("font_size", 16)
+			btn.tooltip_text = entry[1]
+			btn.pressed.connect(OS.shell_open.bind(entry[1]))
+			row.add_child(btn)
 
 func _blink_coin_label() -> void:
 	var tw := create_tween().set_loops()
@@ -111,6 +137,9 @@ func _start_game() -> void:
 	menu_panel.visible = false
 	game_over_panel.visible = false
 	hole_qa.clear()
+	heard_qa.clear()
+	arcade_mode = false
+	vocal_timer = 0.0
 	for i in holes.size():
 		holes[i].force_sink()
 		holes[i].position = hole_base_pos[i]
@@ -128,6 +157,12 @@ func _process(delta: float) -> void:
 	if spawn_timer <= 0.0:
 		_spawn_reporter()
 		spawn_timer = _spawn_interval()
+	if arcade_mode:
+		vocal_timer -= delta
+		if vocal_timer <= 0.0 and not voice.is_talking():
+			# Background chatter: replay a random Q&A line, purely atmospheric.
+			voice.ask_question(voice.random_qa())
+			vocal_timer = _vocal_interval()
 	var new_level := mini(int(elapsed / LEVEL_DURATION) + 1, MAX_LEVEL)
 	if new_level > level:
 		_enter_level(new_level)
@@ -191,32 +226,52 @@ func _spawn_banner(text: String) -> void:
 	tw.tween_callback(lbl.queue_free)
 
 func _spawn_interval() -> float:
-	# Slow, listenable pace at level 1 (hear the full Q&A comedy),
-	# frantic arcade chaos by level 10.
 	var t := float(level - 1) / float(MAX_LEVEL - 1)
-	return lerpf(4.0, 0.6, t) * randf_range(0.85, 1.15)
+	if arcade_mode:
+		# Pure whacking phase: frantic pace, ramping even faster with level.
+		return lerpf(1.8, 0.45, t) * randf_range(0.85, 1.15)
+	# Intro phase: slow, listenable pace so every Q&A plays fully once.
+	return lerpf(4.0, 2.0, t) * randf_range(0.9, 1.1)
 
-func _question_grace() -> float:
-	# Extra hit time on top of the spoken question length. Positive early
-	# (you can hear the whole question), negative late (cut them off or lose).
+func _vocal_interval() -> float:
+	# Background vocal replays start relaxed, tighten as levels ramp up.
 	var t := float(level - 1) / float(MAX_LEVEL - 1)
-	return lerpf(1.2, -0.8, t)
+	return lerpf(12.0, 4.0, t)
+
+func _arcade_hit_window() -> float:
+	# Fixed reaction window once vocals no longer gate the reporters.
+	var t := float(level - 1) / float(MAX_LEVEL - 1)
+	return lerpf(2.4, 0.9, t)
 
 func _spawn_reporter() -> void:
-	# Early levels: one question at a time, so the satire is audible.
-	if level <= 3 and voice.is_talking():
-		return
 	var free := holes.filter(func(h): return not h.is_busy())
 	if free.is_empty():
 		return
 	var hole: Hole = free[randi() % free.size()]
-	var qa_id := voice.random_qa()
-	hole_qa[hole] = qa_id
-	# Hit window = spoken question length (+grace early, -pressure late).
-	var q_time: float = maxf(voice.question_duration(qa_id) + _question_grace(), 1.2)
-	hole.pop_up(0.25, q_time)
+	if not arcade_mode:
+		# Intro phase: one full, uninterrupted question at a time.
+		if voice.is_talking():
+			return
+		var unheard: Array[String] = []
+		for id in voice.qa_ids:
+			if not heard_qa.has(id):
+				unheard.append(id)
+		var qa_id: String = unheard[randi() % unheard.size()]
+		heard_qa[qa_id] = true
+		hole_qa[hole] = qa_id
+		# Hit window = full spoken question length + grace, so it plays out.
+		var q_time: float = maxf(voice.question_duration(qa_id) + 1.2, 1.2)
+		hole.pop_up(0.25, q_time)
+		_play("pop")
+		voice.ask_question(qa_id)
+		if heard_qa.size() >= voice.qa_ids.size():
+			arcade_mode = true
+			vocal_timer = _vocal_interval()
+			_spawn_banner("NO MORE QUESTIONS — WHACK!")
+		return
+	# Arcade phase: reporters just pop, vocals only chatter in the background.
+	hole.pop_up(0.25, _arcade_hit_window())
 	_play("pop")
-	voice.ask_question(qa_id)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if game_state != GameState.PLAYING:
@@ -244,6 +299,8 @@ func _on_whacked(hole: Hole) -> void:
 	if hole_qa.has(hole):
 		voice.answer_question(hole_qa[hole])
 		hole_qa.erase(hole)
+	elif arcade_mode and not voice.is_talking() and randf() < 0.3:
+		voice.say_random("prez_whack", 3)
 	_update_hud()
 
 func _on_question_asked(hole: Hole) -> void:
