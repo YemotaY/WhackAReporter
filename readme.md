@@ -1,9 +1,11 @@
 # 🔨 WHACK-A-REPORTER
 
-> **Bonk the press. Dodge the questions. Get re-elected.**
+<center>
+
+  > **Bonk the press. Dodge the questions. Get re-elected.**
+
 
 *A satirical arcade game by [YemotaY](https://github.com/YemotaY), made with Godot.*
-
 `● INSERT COIN ●`
 
 ---
@@ -39,8 +41,8 @@ approval rating tanks. Survive the full 20-minute term to get **RE-ELECTED**.
 | 🎮 **Play** | [yemotay.itch.io/whack-a-reporter](https://yemotay.itch.io/whack-a-reporter) |
 | ⭐ **Source** | [github.com/YemotaY/WhackAReporter](https://github.com/YemotaY/WhackAReporter) |
 | ❤ **Donate** | [paypal.me/YemotaY](https://www.paypal.me/YemotaY) |
-
 ---
 
+</center>
 *A satirical arcade game by [YemotaY](https://github.com/YemotaY) · Made with Godot ·
 Any resemblance to real presidents is tremendous coincidence.*
