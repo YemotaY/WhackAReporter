@@ -3,7 +3,7 @@
 
   > **Bonk the press. Dodge the questions. Get re-elected.**
 
-<center>`● INSERT COIN ●`</center>
+ <center> ● INSERT COIN ● </center>
 
 ---
 
