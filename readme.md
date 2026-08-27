@@ -1,12 +1,12 @@
 # 🔨 WHACK-A-REPORTER
 
-
-  > **Bonk the press. Dodge the questions. Get re-elected.**
+> **Bonk the press. Dodge the questions. Get re-elected.**
 
 <div style="text-align: center;">
-● INSERT COIN ●
-</div>
+  
+  ● INSERT COIN ●
 
+</div>
 
 ---
 
