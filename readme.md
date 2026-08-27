@@ -6,6 +6,7 @@
 <p align="center">
   ● INSERT COIN ●
 </p>
+
 ---
 
 ## > THE BRIEFING
