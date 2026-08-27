@@ -1,45 +1,82 @@
 class_name VoiceBox
 extends Node
-## Plays voice clips with matching on-screen subtitles.
-## Clips are retro babble placeholders — drop real voice-actor WAVs with the
-## same filenames into assets/voice/ to replace them.
+## Plays neural-TTS voice clips with matching on-screen subtitles.
+## Text and clip keys come from assets/voice/dialogue.json — regenerate the
+## WAVs with `python3 tools/tts_pipeline.py` after editing the dialogue.
+##
+## Q&A flow: a reporter pops up and asks `qa_<id>_q`; if bonked, playback stops
+## and the president delivers the matching `qa_<id>_a` punchline.
 
-const LINES := {
-	"reporter_q1": ["res://assets/voice/reporter_q1.wav", "\"Mr. Präsident, about those classified emails...?\""],
-	"reporter_q2": ["res://assets/voice/reporter_q2.wav", "\"Sir, is it true the budget was spent on golf carts?\""],
-	"reporter_q3": ["res://assets/voice/reporter_q3.wav", "\"Can you explain the missing 40 billion?\""],
-	"reporter_q4": ["res://assets/voice/reporter_q4.wav", "\"Why does your cousin run the treasury?\""],
-	"prez_whack1": ["res://assets/voice/prez_whack1.wav", "\"FAKE NEWS!\""],
-	"prez_whack2": ["res://assets/voice/prez_whack2.wav", "\"NEXT QUESTION!\""],
-	"prez_whack3": ["res://assets/voice/prez_whack3.wav", "\"WRONG!\""],
-	"prez_start": ["res://assets/voice/prez_start.wav", "\"This briefing will be tremendous. The best briefing.\""],
-	"prez_over": ["res://assets/voice/prez_over.wav", "\"I am being impeached bigly. Very unfair!\""],
-	"prez_taunt1": ["res://assets/voice/prez_taunt1.wav", "\"Nobody asks questions better than me.\""],
-	"prez_level2": ["res://assets/voice/prez_level2.wav", "\"They're moving?! Tremendous cowards!\""],
-}
+const DIALOGUE_PATH := "res://assets/voice/dialogue.json"
+const VOICE_DIR := "res://assets/voice/"
 
 var subtitle_label: Label
-var _streams := {}
+var qa_ids: Array[String] = []
+
+var _lines := {}  # key -> {stream, text, is_prez}
 var _player: AudioStreamPlayer
 var _sub_tween: Tween
 
 func _ready() -> void:
-	for key in LINES:
-		_streams[key] = load(LINES[key][0])
+	_load_dialogue()
 	_player = AudioStreamPlayer.new()
 	add_child(_player)
 
-func say(key: String) -> void:
-	if not _streams.has(key):
+func _load_dialogue() -> void:
+	var f := FileAccess.open(DIALOGUE_PATH, FileAccess.READ)
+	var data: Dictionary = JSON.parse_string(f.get_as_text())
+	for key in data["lines"]:
+		_register(key, data["lines"][key])
+	for qa in data["qa"]:
+		var id: String = qa["id"]
+		_register("qa_%s_q" % id, qa["question"])
+		_register("qa_%s_a" % id, qa["answer"])
+		qa_ids.append(id)
+
+func _register(key: String, line: Dictionary) -> void:
+	var path := VOICE_DIR + key + ".wav"
+	if not ResourceLoader.exists(path):
+		push_warning("VoiceBox: missing clip %s (run tools/tts_pipeline.py)" % path)
 		return
+	_lines[key] = {
+		"stream": load(path),
+		"text": "\"%s\"" % line["text"],
+		"is_prez": String(line["speaker"]) == "president",
+	}
+
+func say(key: String) -> void:
+	if not _lines.has(key):
+		return
+	var line: Dictionary = _lines[key]
 	_player.stop()
-	_player.stream = _streams[key]
-	_player.pitch_scale = randf_range(0.97, 1.03)
+	_player.stream = line["stream"]
 	_player.play()
-	_show_subtitle(LINES[key][1], key.begins_with("prez"))
+	_show_subtitle(line["text"], line["is_prez"])
 
 func say_random(prefix: String, count: int) -> void:
 	say("%s%d" % [prefix, randi() % count + 1])
+
+func random_qa() -> String:
+	return qa_ids[randi() % qa_ids.size()]
+
+func ask_question(qa_id: String) -> void:
+	say("qa_%s_q" % qa_id)
+
+func answer_question(qa_id: String) -> void:
+	stop()  # cut the reporter off mid-question
+	say("qa_%s_a" % qa_id)
+
+func question_duration(qa_id: String) -> float:
+	var key := "qa_%s_q" % qa_id
+	if not _lines.has(key):
+		return 0.0
+	return (_lines[key]["stream"] as AudioStream).get_length()
+
+func stop() -> void:
+	_player.stop()
+
+func is_talking() -> bool:
+	return _player.playing
 
 func _show_subtitle(text: String, is_prez: bool) -> void:
 	if subtitle_label == null:
@@ -51,5 +88,5 @@ func _show_subtitle(text: String, is_prez: bool) -> void:
 	if _sub_tween and _sub_tween.is_valid():
 		_sub_tween.kill()
 	_sub_tween = create_tween()
-	_sub_tween.tween_interval(1.8)
+	_sub_tween.tween_interval(3.0)
 	_sub_tween.tween_property(subtitle_label, "modulate:a", 0.0, 0.5)

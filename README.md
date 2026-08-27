@@ -12,7 +12,11 @@ your gavel before their question ring fills up, or your approval drops!
 | --- | --- |
 | Swing gavel | Left mouse click |
 
-- **Hit a reporter** before the `?` ring around their speech bubble fills: `+100 × combo`.
+- **Q&A satire flow**: each reporter *speaks* their question when popping up
+  (neural TTS). Your hit window matches the spoken question length at early
+  levels — bonk them and the audio cuts off and da Präsident delivers his
+  ironic answer. Later levels shrink the window below the question length.
+- **Hit a reporter** before the `?` ring fills: `+100 × combo`.
 - **Miss a swing** and your combo resets.
 - **Let a question finish** and you lose one ❤ Approval. Run out = **IMPEACHED!**
 - **10 levels, 2 minutes each** — survive the full **20-minute term** to get **RE-ELECTED** (+5000 bonus).
@@ -42,41 +46,51 @@ godot --headless -s tests/smoke_test.gd
 assets/
   crt_overlay.gdshader   CRT scanline/vignette overlay
   sfx/                   synthesized sound effects (WAV)
-  voice/                 voice clips + retro babble placeholders (WAV)
+  voice/                 dialogue.json + TTS-generated voice clips (WAV)
 scenes/main.tscn         main scene (game + UI)
 scripts/
   main.gd                game loop, levels, score, spawning, leaderboard, HUD
   hole.gd                podium: pop-up/sink animation, question timer, hit box
   reporter.gd            procedurally drawn reporter (random suits/hair)
   hammer.gd              gavel mouse cursor with swing animation
-  voice.gd               voice clip + subtitle playback (VoiceBox)
+  voice.gd               Q&A dialogue playback with subtitles (VoiceBox)
 tests/smoke_test.gd      headless gameplay test
 tools/
   gen_sfx.py             regenerates assets/sfx/*.wav
-  gen_voice.py           regenerates assets/voice/*.wav
+  tts_pipeline.py        dialogue.json -> WAVs via Piper (espeak-ng fallback)
 ```
 
-## Replacing the Voice Clips
+## Voice Pipeline (TTS)
 
-The shipped voice clips are synthesized retro "babble" placeholders
-(Animal-Crossing style). To use real voice-actor recordings, simply replace
-the WAV files in `assets/voice/` — keep the same filenames. The spoken text
-for each clip (shown as subtitles) is defined in `scripts/voice.gd` (`LINES`).
+All spoken lines live in `assets/voice/dialogue.json`: single president lines
+plus `qa` pairs (reporter question → president answer) that drive gameplay.
+Subtitles are read from the same file.
 
-| File | Line |
-| --- | --- |
-| `reporter_q1..4.wav` | Reporter questions |
-| `prez_whack1..3.wav` | "FAKE NEWS!", "NEXT QUESTION!", "WRONG!" |
-| `prez_start.wav` | Briefing intro |
-| `prez_over.wav` | Impeachment lament |
-| `prez_taunt1.wav` | Combo taunt |
-| `prez_level2.wav` | Level 2 reaction |
+The pipeline uses **Piper** neural TTS (natural voices; deep pompous male for
+the president, urgent male/female reporters) and falls back to espeak-ng.
 
-Regenerate all placeholder audio with:
+One-time setup:
 
 ```bash
-python3 tools/gen_sfx.py && python3 tools/gen_voice.py
+sudo pacman -S python-pip            # or your distro's pip package
+python3 -m venv ~/.local/share/piper-venv
+~/.local/share/piper-venv/bin/pip install piper-tts
+mkdir -p ~/.local/share/piper-voices && cd ~/.local/share/piper-voices
+for v in hfc_male/medium/en_US-hfc_male-medium joe/medium/en_US-joe-medium \
+         hfc_female/medium/en_US-hfc_female-medium; do
+  curl -LO "https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/$v.onnx"
+  curl -LO "https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/$v.onnx.json"
+done
 ```
+
+Regenerate all WAVs after editing the dialogue:
+
+```bash
+python3 tools/tts_pipeline.py
+```
+
+To use real voice-actor recordings, replace the WAVs in `assets/voice/` —
+keep the filenames (`<line_key>.wav`, `qa_<id>_q.wav`, `qa_<id>_a.wav`).
 
 ## License
 

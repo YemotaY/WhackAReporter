@@ -24,6 +24,7 @@ var leaderboard: Array = []  # [{name, score, level}]
 
 var holes: Array[Hole] = []
 var hole_base_pos: Array[Vector2] = []
+var hole_qa := {}  # Hole -> qa id currently being asked
 var hammer: Hammer
 var voice: VoiceBox
 
@@ -109,11 +110,14 @@ func _start_game() -> void:
 	game_state = GameState.PLAYING
 	menu_panel.visible = false
 	game_over_panel.visible = false
+	hole_qa.clear()
 	for i in holes.size():
 		holes[i].force_sink()
 		holes[i].position = hole_base_pos[i]
 	_play("start")
 	voice.say("prez_start")
+	# Give the opening monologue room before the first reporter pops.
+	spawn_timer = 6.0
 	_update_hud()
 
 func _process(delta: float) -> void:
@@ -187,24 +191,32 @@ func _spawn_banner(text: String) -> void:
 	tw.tween_callback(lbl.queue_free)
 
 func _spawn_interval() -> float:
-	# Per-level ramp: 1.5s at level 1 down to 0.5s at level 10.
+	# Slow, listenable pace at level 1 (hear the full Q&A comedy),
+	# frantic arcade chaos by level 10.
 	var t := float(level - 1) / float(MAX_LEVEL - 1)
-	return lerpf(1.5, 0.5, t) * randf_range(0.8, 1.2)
+	return lerpf(4.0, 0.6, t) * randf_range(0.85, 1.15)
 
-func _question_time() -> float:
-	# Reporters ask faster per level: 2.6s -> 1.0s.
+func _question_grace() -> float:
+	# Extra hit time on top of the spoken question length. Positive early
+	# (you can hear the whole question), negative late (cut them off or lose).
 	var t := float(level - 1) / float(MAX_LEVEL - 1)
-	return lerpf(2.6, 1.0, t)
+	return lerpf(1.2, -0.8, t)
 
 func _spawn_reporter() -> void:
+	# Early levels: one question at a time, so the satire is audible.
+	if level <= 3 and voice.is_talking():
+		return
 	var free := holes.filter(func(h): return not h.is_busy())
 	if free.is_empty():
 		return
 	var hole: Hole = free[randi() % free.size()]
-	hole.pop_up(0.25, _question_time())
+	var qa_id := voice.random_qa()
+	hole_qa[hole] = qa_id
+	# Hit window = spoken question length (+grace early, -pressure late).
+	var q_time: float = maxf(voice.question_duration(qa_id) + _question_grace(), 1.2)
+	hole.pop_up(0.25, q_time)
 	_play("pop")
-	if randf() < 0.55:
-		voice.say_random("reporter_q", 4)
+	voice.ask_question(qa_id)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if game_state != GameState.PLAYING:
@@ -228,13 +240,14 @@ func _on_whacked(hole: Hole) -> void:
 	_play("whack")
 	_shake()
 	_spawn_score_popup(hole.global_position + Vector2(0, -120), "+%d" % (100 * combo))
-	if randf() < 0.4:
-		voice.say_random("prez_whack", 3)
-	elif combo >= 5 and randf() < 0.5:
-		voice.say("prez_taunt1")
+	# Question audio stops dead; the president delivers his answer.
+	if hole_qa.has(hole):
+		voice.answer_question(hole_qa[hole])
+		hole_qa.erase(hole)
 	_update_hud()
 
-func _on_question_asked(_hole: Hole) -> void:
+func _on_question_asked(hole: Hole) -> void:
+	hole_qa.erase(hole)
 	lives -= 1
 	combo = 0
 	_play("question")
@@ -253,7 +266,7 @@ func _victory() -> void:
 	score += 5000  # term-completion bonus
 	_end_round("RE-ELECTED!", "You survived the full 20-minute term!")
 	_play("start")
-	voice.say("prez_taunt1")
+	voice.say("prez_won")
 
 func _end_round(title: String, sub: String) -> void:
 	high_score = max(high_score, score)

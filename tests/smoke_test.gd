@@ -18,6 +18,7 @@ func _initialize() -> void:
 	main.spawn_timer = 999.0  # suppress auto-spawn for deterministic test
 
 	# Force a spawn and let the pop-up animation finish
+	main.voice.stop()  # intro monologue blocks spawns at early levels
 	main._spawn_reporter()
 	main.spawn_timer = 999.0
 	var busy: Array = main.holes.filter(func(h): return h.is_busy())
@@ -31,18 +32,25 @@ func _initialize() -> void:
 	assert(hit, "whack should land")
 	assert(main.score == 100, "score should be 100, got %d" % main.score)
 	assert(main.combo == 1, "combo should be 1")
+	# Bonk cuts the question and the president answers
+	assert(main.voice.is_talking(), "president should be answering after bonk")
+	assert(main.subtitle_label.text != "", "answer subtitle shown")
 
 	# Whack far away should miss
 	await create_timer(0.6).timeout
+	main.voice.stop()
 	main._spawn_reporter()
 	main.spawn_timer = 999.0
 	var busy2: Array = main.holes.filter(func(h): return h.is_busy())
 	var hole2: Hole = busy2[0]
 	var miss: bool = hole2.try_whack(hole2.global_position + Vector2(300, 300))
 	assert(not miss, "far whack should miss")
+	# Hit window must cover the spoken question at level 1
+	var qa_id: String = main.hole_qa[hole2]
+	assert(hole2.question_time >= main.voice.question_duration(qa_id), "hit time >= question length")
 
 	# Let the question complete -> lose a life
-	await create_timer(3.0).timeout
+	await create_timer(hole2.question_time + 1.0).timeout
 	assert(main.lives == 2, "should have lost a life, lives=%d" % main.lives)
 
 	# Drain remaining lives -> game over
@@ -73,6 +81,15 @@ func _initialize() -> void:
 	assert(main.voice != null and main.voice.subtitle_label != null, "voice box wired")
 	main.voice.say("prez_whack1")
 	assert(main.subtitle_label.text != "", "subtitle shown")
+
+	# Q&A dialogue loaded from dialogue.json
+	assert(main.voice.qa_ids.size() >= 8, "qa pairs loaded")
+	main.voice.ask_question("economy")
+	assert(main.voice.is_talking(), "question playing")
+	assert(main.subtitle_label.text.contains("nine percent"), "question subtitle shown")
+	main.voice.answer_question("economy")
+	assert(main.subtitle_label.text.contains("minus nine percent"), "answer subtitle shown")
+	assert(main.voice.question_duration("economy") > 1.0, "question has real duration")
 
 	# Leaderboard
 	main.leaderboard = []

@@ -124,12 +124,25 @@ func _kill_tween() -> void:
 
 
 class HoleFront extends Node2D:
+	# Must match the back-ellipse in Hole._draw exactly.
+	const ELLIPSE_CENTER := Vector2(0, 70)
+	const ELLIPSE_R := 60.0
+	const ELLIPSE_SCALE := Vector2(1.0, 0.45)
+
 	func _draw() -> void:
-		# Podium front that masks the reporter below the hole line.
-		draw_rect(Rect2(-70, 70, 140, 60), Color(0.45, 0.30, 0.18))
-		draw_rect(Rect2(-70, 70, 140, 8), Color(0.55, 0.38, 0.24))
-		draw_set_transform(Vector2(0, 74), 0.0, Vector2(1.0, 0.35))
-		draw_arc(Vector2.ZERO, 60, 0, TAU, 32, Color(0.30, 0.20, 0.12), 6.0)
+		# Podium front, exactly as wide as the hole ellipse (2 * ELLIPSE_R).
+		draw_rect(Rect2(-ELLIPSE_R, 70, ELLIPSE_R * 2, 60), Color(0.45, 0.30, 0.18))
+		draw_rect(Rect2(-ELLIPSE_R, 70, ELLIPSE_R * 2, 8), Color(0.55, 0.38, 0.24))
+		# Cutout: bottom half of the hole ellipse, so the opening continues
+		# into the podium front instead of being cut off by the square edge.
+		var pts := PackedVector2Array()
+		for i in 33:
+			var a := PI * i / 32.0  # 0..PI = bottom half (y-down)
+			pts.append(ELLIPSE_CENTER + Vector2(cos(a), sin(a)) * ELLIPSE_R * ELLIPSE_SCALE)
+		draw_colored_polygon(pts, Color(0.08, 0.06, 0.05))
+		# Rim ring sitting exactly on the hole ellipse.
+		draw_set_transform(ELLIPSE_CENTER, 0.0, ELLIPSE_SCALE)
+		draw_arc(Vector2.ZERO, ELLIPSE_R, 0, TAU, 48, Color(0.30, 0.20, 0.12), 6.0)
 		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 
