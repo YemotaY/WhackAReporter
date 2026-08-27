@@ -56,5 +56,20 @@ func _initialize() -> void:
 	main._start_game()
 	assert(main.game_state == main.GameState.PLAYING and main.lives == 3, "restart ok")
 
+	# Level 2: moving holes
+	assert(main.level == 1, "starts at level 1")
+	main.score = main.LEVEL2_SCORE
+	await process_frame
+	await process_frame
+	assert(main.level == 2, "should be level 2")
+	var x_before: float = main.holes[0].position.x
+	await create_timer(0.5).timeout
+	assert(absf(main.holes[0].position.x - x_before) > 1.0, "holes should move in level 2")
+
+	# Voice system wired
+	assert(main.voice != null and main.voice.subtitle_label != null, "voice box wired")
+	main.voice.say("prez_whack1")
+	assert(main.subtitle_label.text != "", "subtitle shown")
+
 	print("ALL SMOKE TESTS PASSED")
 	quit(0)

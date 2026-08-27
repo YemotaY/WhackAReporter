@@ -9,7 +9,8 @@ func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 
 func _process(_delta: float) -> void:
-	global_position = get_global_mouse_position()
+	# Works inside a CanvasLayer: track the raw viewport mouse position.
+	position = get_viewport().get_mouse_position()
 
 func swing() -> void:
 	if _swinging:

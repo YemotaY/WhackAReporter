@@ -4,6 +4,9 @@ extends Node2D
 const GRID_COLS := 3
 const GRID_ROWS := 2
 const START_LIVES := 3
+const LEVEL2_SCORE := 1500
+const HOLE_MOVE_AMPLITUDE := 70.0
+const HOLE_MOVE_SPEED := 1.6
 
 enum GameState { MENU, PLAYING, GAME_OVER }
 
@@ -14,9 +17,12 @@ var combo := 0
 var high_score := 0
 var elapsed := 0.0
 var spawn_timer := 0.0
+var level := 1
 
 var holes: Array[Hole] = []
+var hole_base_pos: Array[Vector2] = []
 var hammer: Hammer
+var voice: VoiceBox
 
 @onready var sfx := {
 	"whack": preload("res://assets/sfx/whack.wav"),
@@ -34,17 +40,33 @@ var hammer: Hammer
 @onready var menu_panel: Control = %MenuPanel
 @onready var game_over_panel: Control = %GameOverPanel
 @onready var final_label: Label = %FinalLabel
+@onready var level_label: Label = %LevelLabel
+@onready var subtitle_label: Label = %SubtitleLabel
+@onready var coin_label: Label = %CoinLabel
 
 func _ready() -> void:
 	_build_background()
 	_build_holes()
+	# Hammer lives on its own CanvasLayer above all UI (layer > UI's default 1).
+	var hammer_layer := CanvasLayer.new()
+	hammer_layer.layer = 100
+	add_child(hammer_layer)
 	hammer = Hammer.new()
-	add_child(hammer)
+	hammer_layer.add_child(hammer)
+	voice = VoiceBox.new()
+	voice.subtitle_label = subtitle_label
+	add_child(voice)
 	menu_panel.visible = true
 	game_over_panel.visible = false
 	%StartButton.pressed.connect(_start_game)
 	%RetryButton.pressed.connect(_start_game)
+	_blink_coin_label()
 	_update_hud()
+
+func _blink_coin_label() -> void:
+	var tw := create_tween().set_loops()
+	tw.tween_property(coin_label, "modulate:a", 0.15, 0.5)
+	tw.tween_property(coin_label, "modulate:a", 1.0, 0.5)
 
 func _build_background() -> void:
 	var bg := BriefingRoomBG.new()
@@ -60,6 +82,7 @@ func _build_holes() -> void:
 			hole.question_asked.connect(_on_question_asked)
 			add_child(hole)
 			holes.append(hole)
+			hole_base_pos.append(hole.position)
 
 func _start_game() -> void:
 	score = 0
@@ -67,12 +90,15 @@ func _start_game() -> void:
 	combo = 0
 	elapsed = 0.0
 	spawn_timer = 0.6
+	level = 1
 	game_state = GameState.PLAYING
 	menu_panel.visible = false
 	game_over_panel.visible = false
-	for h in holes:
-		h.force_sink()
+	for i in holes.size():
+		holes[i].force_sink()
+		holes[i].position = hole_base_pos[i]
 	_play("start")
+	voice.say("prez_start")
 	_update_hud()
 
 func _process(delta: float) -> void:
@@ -83,6 +109,43 @@ func _process(delta: float) -> void:
 	if spawn_timer <= 0.0:
 		_spawn_reporter()
 		spawn_timer = _spawn_interval()
+	if level == 1 and score >= LEVEL2_SCORE:
+		_enter_level2()
+	if level >= 2:
+		_move_holes(delta)
+
+func _enter_level2() -> void:
+	level = 2
+	voice.say("prez_level2")
+	_spawn_banner("LEVEL 2 — THEY'RE MOVING!")
+	_update_hud()
+
+func _move_holes(_delta: float) -> void:
+	for i in holes.size():
+		var phase := float(i) * 1.1
+		var dir := 1.0 if i % 2 == 0 else -1.0
+		holes[i].position.x = hole_base_pos[i].x \
+			+ dir * sin(elapsed * HOLE_MOVE_SPEED + phase) * HOLE_MOVE_AMPLITUDE
+
+func _spawn_banner(text: String) -> void:
+	var lbl := Label.new()
+	lbl.text = text
+	lbl.add_theme_font_size_override("font_size", 48)
+	lbl.add_theme_color_override("font_color", Color(1.0, 0.35, 0.25))
+	lbl.add_theme_color_override("font_outline_color", Color.BLACK)
+	lbl.add_theme_constant_override("outline_size", 10)
+	lbl.size = Vector2(960, 80)
+	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	lbl.position = Vector2(0, 250)
+	lbl.z_index = 60
+	lbl.scale = Vector2(0.2, 0.2)
+	lbl.pivot_offset = Vector2(480, 40)
+	add_child(lbl)
+	var tw := create_tween()
+	tw.tween_property(lbl, "scale", Vector2.ONE, 0.3).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tw.tween_interval(1.2)
+	tw.tween_property(lbl, "modulate:a", 0.0, 0.4)
+	tw.tween_callback(lbl.queue_free)
 
 func _spawn_interval() -> float:
 	# Gets faster over time: 1.5s -> 0.55s
@@ -99,6 +162,8 @@ func _spawn_reporter() -> void:
 	var hole: Hole = free[randi() % free.size()]
 	hole.pop_up(0.25, _question_time())
 	_play("pop")
+	if randf() < 0.55:
+		voice.say_random("reporter_q", 4)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if game_state != GameState.PLAYING:
@@ -122,6 +187,10 @@ func _on_whacked(hole: Hole) -> void:
 	_play("whack")
 	_shake()
 	_spawn_score_popup(hole.global_position + Vector2(0, -120), "+%d" % (100 * combo))
+	if randf() < 0.4:
+		voice.say_random("prez_whack", 3)
+	elif combo >= 5 and randf() < 0.5:
+		voice.say("prez_taunt1")
 	_update_hud()
 
 func _on_question_asked(_hole: Hole) -> void:
@@ -138,13 +207,15 @@ func _game_over() -> void:
 	for h in holes:
 		h.force_sink()
 	_play("fail")
-	final_label.text = "Final Score: %d\nBest: %d" % [score, high_score]
+	voice.say("prez_over")
+	final_label.text = "FINAL SCORE %06d\nBEST %06d" % [score, high_score]
 	game_over_panel.visible = true
 
 func _update_hud() -> void:
-	score_label.text = "Score: %d" % score
-	lives_label.text = "Approval: " + "❤".repeat(max(0, lives)) + "♡".repeat(START_LIVES - max(0, lives))
-	combo_label.text = "Combo x%d" % combo if combo > 1 else ""
+	score_label.text = "SCORE %06d" % score
+	lives_label.text = "APPROVAL " + "❤".repeat(max(0, lives)) + "♡".repeat(START_LIVES - max(0, lives))
+	combo_label.text = "COMBO x%d" % combo if combo > 1 else ""
+	level_label.text = "LEVEL %d" % level
 
 func _spawn_score_popup(pos: Vector2, text: String) -> void:
 	var lbl := Label.new()
