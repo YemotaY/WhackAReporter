@@ -1,3 +1,39 @@
-# Godot 4+ specific ignores
+# --- Godot ------------------------------------------------------------------
 .godot/
 *.tmp
+# GDMaim runtime artefacts (settings in .gdmaim/export.cfg ARE committed)
+addons/gdmaim/cache/
+addons/gdmaim/source_maps/
+addons/gdmaim/backup/
+addons/gdmaim/export.cfg
+addons/gdmaim/user/
+
+# --- Release pipeline (never commit) -----------------------------------------
+# Toolchains, Godot source, compiled export templates, venv
+build/
+# Exported game binaries
+export/
+# ALL secrets: encryption key, keystores, API keys, obfuscation source maps
+secrets/
+.env
+.env.*
+!.env.example
+
+# --- Secret file types, wherever they end up ---------------------------------
+*.key
+*.pem
+*.p12
+*.pfx
+*.keystore
+*.jks
+*.mobileprovision
+*.cer
+*.gd.map
+export_credentials.cfg
+override.cfg
+
+# --- OS / editor noise --------------------------------------------------------
+.DS_Store
+Thumbs.db
+*.swp
+*~

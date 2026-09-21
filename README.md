@@ -37,12 +37,76 @@ godot -e --path .     # open in editor
 Headless gameplay smoke test (spawning, hit detection, lives, game over, restart):
 
 ```bash
-godot --headless -s tests/smoke_test.gd
+godot --headless -s tests/smoke_test.gd     # or: make test-source
+make test                                   # + the same test inside an obfuscated, encrypted export
 ```
+
+## Release Pipeline
+
+Builds are **encrypted, obfuscated and stripped**; everything lives in
+`tools/release/` and is driven by the `Makefile`.
+
+```bash
+make setup            # venv + SCons, Godot source -> build/godot, key, git hooks
+make setup-all        # + llvm-mingw (Windows), emsdk (Web), JDK + Android SDK/NDK
+make templates        # compile hardened export templates (once per key / engine version)
+
+make linux            # export/v<VERSION>/linux/
+make windows          # export/v<VERSION>/windows/
+make web              # export/v<VERSION>/web/ + itch.io zip
+make android          # export/v<VERSION>/android/*.apk (signed)
+make ios              # export/v<VERSION>/ios/*.xcodeproj  (template must be built on macOS)
+make itch             # web export + `butler push` to itch.io
+make release          # test + linux + windows + web + android + verify
+VERSION=1.1.0 make release
+```
+
+### Anti-reverse-engineering layers
+
+| Layer | What it does |
+| --- | --- |
+| [GDMaim](https://github.com/cherriesandmochi/gdmaim) (`addons/gdmaim`) | Renames every identifier, strips comments/annotations, shuffles declarations, emits compressed binary tokens instead of source. Settings: `.gdmaim/export.cfg`. |
+| PCK encryption | `encrypt_pck` + `encrypt_directory` on every preset: AES-256 over file contents **and** the file table (no readable paths). |
+| Custom export templates | Compiled from source (`build/godot`) with the key baked in, `production=yes`, symbols stripped, `disable_overrides=yes` (no `override.cfg`) and Godot 4.7's `disable_path_overrides` (no `--main-pack`, `-s`, `--path`). Official templates cannot open the PCKs. |
+| Silent runtime | `disable_stdout` / `disable_stderr` are on, so no script names or errors leak to logs. |
+| Shipping filter | `tests/`, `tools/`, `docs/` and the obfuscator itself are excluded from every PCK. |
+
+No scheme makes a client binary impossible to reverse; the key can always be
+recovered by someone debugging the running process. These layers make the
+result expensive: even a recovered PCK yields only renamed, comment-free
+bytecode.
+
+### Secrets (never committed)
+
+```
+secrets/encryption.key              256-bit PCK key  (make setup generates it)
+secrets/android_release.keystore    + .pass          (make setup-android)
+secrets/itch_api_key                for make itch
+secrets/gdmaim_source_maps/         obfuscation maps - needed to read crash reports
+.env                                VERSION, ITCH_TARGET (copy of .env.example)
+.godot/export_credentials.cfg       written by Godot; synced from secrets/ via make sync-creds
+```
+
+`secrets/`, `build/`, `export/`, `.env` and `.godot/` are git-ignored, and
+`tools/release/check_secrets.sh` runs as a pre-commit hook (installed by
+`make setup`) that refuses commits containing the key, keystore passwords or
+forbidden paths. `make check-secrets` scans the whole tree.
+
+**Back up `secrets/` somewhere safe** - losing the key means rebuilding the
+templates, and losing the keystore means no more Play Store updates.
+
+### Verification
+
+`make test` / `make verify` prove for each artefact that no source identifier
+or `res://` path survives in plaintext, the PCK directory is flagged encrypted,
+the release binary boots headless and ignores CLI path overrides, and (via the
+`Linux Test` preset) that the full gameplay smoke test passes *inside* the
+obfuscated, encrypted build.
 
 ## Project Structure
 
 ```
+addons/gdmaim/           GDScript obfuscator (export plugin, MIT)
 assets/
   crt_overlay.gdshader   CRT scanline/vignette overlay
   sfx/                   synthesized sound effects (WAV)
@@ -58,6 +122,11 @@ tests/smoke_test.gd      headless gameplay test
 tools/
   gen_sfx.py             regenerates assets/sfx/*.wav
   tts_pipeline.py        dialogue.json -> WAVs via Piper (espeak-ng fallback)
+  release/               build/export/verify/publish scripts (see Release Pipeline)
+export_presets.cfg       Godot export presets (hardened; no secrets inside)
+Makefile                 release entry points
+build/                   (git-ignored) Godot source, toolchains, compiled templates
+secrets/                 (git-ignored) encryption key, keystores, API keys
 ```
 
 ## Voice Pipeline (TTS)
@@ -96,3 +165,11 @@ keep the filenames (`<line_key>.wav`, `qa_<id>_q.wav`, `qa_<id>_a.wav`).
 
 [MIT](LICENSE). All code and generated assets are original to this project.
 This is a work of satire; any resemblance to actual presidents is comedic.
+
+## SUPPORT
+
+| | |
+|---|---|
+| 🎮 **Play** | [yemotay.itch.io/whack-a-reporter](https://yemotay.itch.io/whack-a-reporter) |
+| ⭐ **Source** | [github.com/YemotaY/WhackAReporter](https://github.com/YemotaY/WhackAReporter) |
+| ❤ **Donate** | [paypal.me/YemotaY](https://www.paypal.me/resellwithpi) |

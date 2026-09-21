@@ -11,7 +11,7 @@ const LEADERBOARD_PATH := "user://leaderboard.json"
 const LEADERBOARD_SIZE := 10
 const URL_GITHUB := "https://github.com/YemotaY/WhackAReporter"
 const URL_ITCH := "https://yemotay.itch.io/whack-a-reporter"
-const URL_PAYPAL := "https://www.paypal.me/YemotaY"
+const URL_PAYPAL := "https://www.paypal.com/paypalme/resellwithpi"
 
 enum GameState { MENU, PLAYING, GAME_OVER, VICTORY }
 
@@ -92,7 +92,7 @@ func _build_link_buttons() -> void:
 		vbox.add_child(row)
 		for entry in [
 			["\u2b50 GitHub", URL_GITHUB],
-			["\U0001F3AE itch.io", URL_ITCH],
+			["\u25b6 itch.io", URL_ITCH],
 			["\u2764 Donate", URL_PAYPAL],
 		]:
 			var btn := Button.new()

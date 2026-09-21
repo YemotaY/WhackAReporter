@@ -1,55 +1,55 @@
 {
   "comment": "Whack-A-Reporter dialogue. Edit text here, then run tools/tts_pipeline.py (Piper neural TTS) to regenerate WAVs. 'qa' pairs drive gameplay: reporter asks the question when popping up; if bonked the president speaks the answer.",
   "lines": {
-    "prez_start":   { "speaker": "president", "text": "Welcome, welcome. This press briefing is about me, the greatest president, possibly of all time. Keep your questions short, wrong, and unasked." },
-    "prez_over":    { "speaker": "president", "text": "Impeached? I am being impeached bigly. This is the most unfair thing since my golf handicap." },
-    "prez_won":     { "speaker": "president", "text": "Four more years! The reporters are gone and I answered nothing. A perfect term." },
-    "prez_whack1":  { "speaker": "president", "text": "Fake news!" },
-    "prez_whack2":  { "speaker": "president", "text": "Next question!" },
-    "prez_whack3":  { "speaker": "president", "text": "Wrong!" },
-    "prez_taunt1":  { "speaker": "president", "text": "Nobody dodges questions better than me. Everybody says so." },
-    "prez_level2":  { "speaker": "president", "text": "They are moving now? Tremendous cowards. Sad!" }
+	"prez_start":   { "speaker": "president", "text": "Welcome, welcome. This press briefing is about me, \nthe greatest president, possibly of all time.\n Keep your questions short, wrong, and unasked." },
+	"prez_over":    { "speaker": "president", "text": "Impeached? I am being impeached bigly. \nThis is the most unfair thing since my golf handicap." },
+	"prez_won":     { "speaker": "president", "text": "Four more years! The reporters are gone and I answered nothing. \nA perfect term." },
+	"prez_whack1":  { "speaker": "president", "text": "Fake news!" },
+	"prez_whack2":  { "speaker": "president", "text": "Next question!" },
+	"prez_whack3":  { "speaker": "president", "text": "Wrong!" },
+	"prez_taunt1":  { "speaker": "president", "text": "Nobody dodges questions better than me. Everybody says so." },
+	"prez_level2":  { "speaker": "president", "text": "They are moving now? Tremendous cowards. Sad!" }
   },
   "qa": [
-    {
-      "id": "docs",
-      "question": { "speaker": "reporter1", "text": "Mister President, why were classified documents found in your golf bag?" },
-      "answer":   { "speaker": "president", "text": "Those were my scorecards. Very classified scorecards. Nobody shoots a sixty-eight like me." }
-    },
-    {
-      "id": "economy",
-      "question": { "speaker": "reporter2", "text": "Sir, the economy shrank by nine percent this quarter. Your comment?" },
-      "answer":   { "speaker": "president", "text": "Wrong. It grew by minus nine percent. That is growth. Look it up, sweetheart." }
-    },
-    {
-      "id": "climate",
-      "question": { "speaker": "reporter1", "text": "Scientists say the climate report is alarming. Have you read it?" },
-      "answer":   { "speaker": "president", "text": "I never read alarming things. That is how I stay so incredibly calm and handsome." }
-    },
-    {
-      "id": "healthcare",
-      "question": { "speaker": "reporter2", "text": "Your new healthcare plan appears to be a coupon for soup. Elaborate?" },
-      "answer":   { "speaker": "president", "text": "It is beautiful soup. Very affordable. The finest soup-based healthcare in the world." }
-    },
-    {
-      "id": "ethics",
-      "question": { "speaker": "reporter1", "text": "The ethics committee says you fired the entire ethics committee. True?" },
-      "answer":   { "speaker": "president", "text": "There is no ethics committee, so who is asking? Exactly. Next question." }
-    },
-    {
-      "id": "polls",
-      "question": { "speaker": "reporter2", "text": "Polls show ninety percent of citizens disapprove of your performance." },
-      "answer":   { "speaker": "president", "text": "Fake polls. My internal numbers show one hundred and ten percent approval. Tremendous math." }
-    },
-    {
-      "id": "treasury",
-      "question": { "speaker": "reporter1", "text": "Why does your cousin with no banking experience run the treasury?" },
-      "answer":   { "speaker": "president", "text": "Kevin is family. Family is trust. Trust is money. The treasury is money. It is all connected." }
-    },
-    {
-      "id": "billions",
-      "question": { "speaker": "reporter2", "text": "Can you explain the missing forty billion dollars from the budget?" },
-      "answer":   { "speaker": "president", "text": "It is not missing. It is exploring. Money needs freedom. That is called capitalism." }
-    }
+	{
+	  "id": "docs",
+	  "question": { "speaker": "reporter1", "text": "Mister President, why were classified documents found in your golf bag?" },
+	  "answer":   { "speaker": "president", "text": "Those were my scorecards. Very classified scorecards. \nNobody shoots a sixty-eight like me." }
+	},
+	{
+	  "id": "economy",
+	  "question": { "speaker": "reporter2", "text": "Sir, the economy shrank by nine percent this quarter. Your comment?" },
+	  "answer":   { "speaker": "president", "text": "Wrong. It grew by minus nine percent. That is growth. Look it up, sweetheart." }
+	},
+	{
+	  "id": "climate",
+	  "question": { "speaker": "reporter1", "text": "Scientists say the climate report is alarming. Have you read it?" },
+	  "answer":   { "speaker": "president", "text": "I never read alarming things. That is how I stay so incredibly calm and handsome." }
+	},
+	{
+	  "id": "healthcare",
+	  "question": { "speaker": "reporter2", "text": "Your new healthcare plan appears to be a coupon for soup. Elaborate?" },
+	  "answer":   { "speaker": "president", "text": "It is beautiful soup. Very affordable. The finest soup-based healthcare in the world." }
+	},
+	{
+	  "id": "ethics",
+	  "question": { "speaker": "reporter1", "text": "The ethics committee says you fired the entire ethics committee. True?" },
+	  "answer":   { "speaker": "president", "text": "There is no ethics committee, so who is asking? Exactly. Next question." }
+	},
+	{
+	  "id": "polls",
+	  "question": { "speaker": "reporter2", "text": "Polls show ninety percent of citizens disapprove of your performance." },
+	  "answer":   { "speaker": "president", "text": "Fake polls. My internal numbers show one hundred and ten percent approval. \nTremendous math." }
+	},
+	{
+	  "id": "treasury",
+	  "question": { "speaker": "reporter1", "text": "Why does your cousin with no banking experience run the treasury?" },
+	  "answer":   { "speaker": "president", "text": "Kevin is family. Family is trust. Trust is money. The treasury is money. \nIt is all connected." }
+	},
+	{
+	  "id": "billions",
+	  "question": { "speaker": "reporter2", "text": "Can you explain the missing forty billion dollars from the budget?" },
+	  "answer":   { "speaker": "president", "text": "It is not missing. It is exploring. Money needs freedom. \nThat is called capitalism." }
+	}
   ]
 }

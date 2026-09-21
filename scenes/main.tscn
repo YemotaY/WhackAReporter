@@ -1,91 +1,91 @@
-[gd_scene load_steps=4 format=3 uid="uid://whackrep0main"]
+[gd_scene format=3 uid="uid://c47ymhsg6lvpt"]
 
-[ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
-[ext_resource type="Shader" path="res://assets/crt_overlay.gdshader" id="2_crt"]
+[ext_resource type="Script" uid="uid://dvo7u465li6nh" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="Shader" uid="uid://dpl4ehkul47n7" path="res://assets/crt_overlay.gdshader" id="2_crt"]
 
 [sub_resource type="ShaderMaterial" id="crt_mat"]
 shader = ExtResource("2_crt")
+shader_parameter/scanline_strength = 0.18
+shader_parameter/vignette_strength = 0.35
 
-[node name="Main" type="Node2D"]
+[node name="Main" type="Node2D" unique_id=1555621318]
 script = ExtResource("1_main")
 
-[node name="UI" type="CanvasLayer" parent="."]
+[node name="UI" type="CanvasLayer" parent="." unique_id=1478676267]
 
-[node name="ScoreLabel" type="Label" parent="UI"]
+[node name="ScoreLabel" type="Label" parent="UI" unique_id=261186292]
 unique_name_in_owner = true
 offset_left = 20.0
 offset_top = 12.0
 offset_right = 320.0
 offset_bottom = 52.0
-theme_override_font_sizes/font_size = 28
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 28
 text = "Score: 0"
 
-[node name="LivesLabel" type="Label" parent="UI"]
+[node name="LivesLabel" type="Label" parent="UI" unique_id=783008232]
 unique_name_in_owner = true
 offset_left = 660.0
 offset_top = 12.0
 offset_right = 940.0
 offset_bottom = 52.0
-theme_override_font_sizes/font_size = 28
 theme_override_colors/font_color = Color(1, 0.4, 0.4, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 6
-horizontal_alignment = 2
+theme_override_font_sizes/font_size = 28
 text = "Approval:"
+horizontal_alignment = 2
 
-[node name="ComboLabel" type="Label" parent="UI"]
+[node name="ComboLabel" type="Label" parent="UI" unique_id=1372210862]
 unique_name_in_owner = true
 offset_left = 380.0
 offset_top = 12.0
 offset_right = 580.0
 offset_bottom = 52.0
-theme_override_font_sizes/font_size = 26
 theme_override_colors/font_color = Color(1, 0.9, 0.2, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 26
 horizontal_alignment = 1
-text = ""
 
-[node name="LevelLabel" type="Label" parent="UI"]
+[node name="LevelLabel" type="Label" parent="UI" unique_id=1985789412]
 unique_name_in_owner = true
 offset_left = 380.0
-offset_top = 46.0
+offset_top = 154.0
 offset_right = 580.0
-offset_bottom = 80.0
-theme_override_font_sizes/font_size = 20
+offset_bottom = 188.0
 theme_override_colors/font_color = Color(0.5, 1, 0.6, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
-horizontal_alignment = 1
+theme_override_font_sizes/font_size = 20
 text = "LEVEL 1"
+horizontal_alignment = 1
 
-[node name="TimerLabel" type="Label" parent="UI"]
+[node name="TimerLabel" type="Label" parent="UI" unique_id=497837371]
 unique_name_in_owner = true
 offset_left = 20.0
 offset_top = 46.0
 offset_right = 320.0
 offset_bottom = 80.0
-theme_override_font_sizes/font_size = 20
 theme_override_colors/font_color = Color(0.6, 0.85, 1, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 20
 text = "TERM 20:00"
 
-[node name="SubtitleLabel" type="Label" parent="UI"]
+[node name="SubtitleLabel" type="Label" parent="UI" unique_id=534154677]
 unique_name_in_owner = true
 offset_left = 40.0
-offset_top = 580.0
+offset_top = 158.0
 offset_right = 920.0
-offset_bottom = 628.0
-theme_override_font_sizes/font_size = 22
+offset_bottom = 206.0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 22
 horizontal_alignment = 1
-text = ""
 
-[node name="MenuPanel" type="PanelContainer" parent="UI"]
+[node name="MenuPanel" type="PanelContainer" parent="UI" unique_id=1168851832]
 unique_name_in_owner = true
 anchors_preset = 8
 anchor_left = 0.5
@@ -99,55 +99,55 @@ offset_bottom = 260.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBox" type="VBoxContainer" parent="UI/MenuPanel"]
+[node name="VBox" type="VBoxContainer" parent="UI/MenuPanel" unique_id=581862955]
 layout_mode = 2
 theme_override_constants/separation = 16
 alignment = 1
 
-[node name="Title" type="Label" parent="UI/MenuPanel/VBox"]
+[node name="Title" type="Label" parent="UI/MenuPanel/VBox" unique_id=1995842457]
 layout_mode = 2
-theme_override_font_sizes/font_size = 42
 theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
 theme_override_colors/font_outline_color = Color(0.6, 0.1, 0.1, 1)
 theme_override_constants/outline_size = 10
-horizontal_alignment = 1
+theme_override_font_sizes/font_size = 42
 text = "WHACK-A-REPORTER"
+horizontal_alignment = 1
 
-[node name="Subtitle" type="Label" parent="UI/MenuPanel/VBox"]
+[node name="Subtitle" type="Label" parent="UI/MenuPanel/VBox" unique_id=719474587]
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
-horizontal_alignment = 1
-autowrap_mode = 2
 text = "You are da Präsident. Reporters keep popping up
 with serious questions. Bonk them with your gavel
 before the question ring fills up — or lose approval!
 Survive the full 20-minute term to get RE-ELECTED.
 New level every 2 minutes — podiums start moving at level 2!"
+horizontal_alignment = 1
+autowrap_mode = 2
 
-[node name="StartButton" type="Button" parent="UI/MenuPanel/VBox"]
+[node name="StartButton" type="Button" parent="UI/MenuPanel/VBox" unique_id=377019028]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 28
 text = "  START PRESS BRIEFING  "
 
-[node name="CoinLabel" type="Label" parent="UI/MenuPanel/VBox"]
+[node name="CoinLabel" type="Label" parent="UI/MenuPanel/VBox" unique_id=1061856748]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 18
 theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
-horizontal_alignment = 1
+theme_override_font_sizes/font_size = 18
 text = "● INSERT COIN ●"
+horizontal_alignment = 1
 
-[node name="BoardMenuLabel" type="Label" parent="UI/MenuPanel/VBox"]
+[node name="BoardMenuLabel" type="Label" parent="UI/MenuPanel/VBox" unique_id=104186158]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
 theme_override_colors/font_color = Color(0.6, 1, 0.7, 1)
-horizontal_alignment = 1
+theme_override_font_sizes/font_size = 16
 text = "— HIGH SCORES —"
+horizontal_alignment = 1
 
-[node name="GameOverPanel" type="PanelContainer" parent="UI"]
+[node name="GameOverPanel" type="PanelContainer" parent="UI" unique_id=293684938]
 unique_name_in_owner = true
 visible = false
 anchors_preset = 8
@@ -162,79 +162,79 @@ offset_bottom = 270.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBox" type="VBoxContainer" parent="UI/GameOverPanel"]
+[node name="VBox" type="VBoxContainer" parent="UI/GameOverPanel" unique_id=1810400788]
 layout_mode = 2
 theme_override_constants/separation = 12
 alignment = 1
 
-[node name="OverTitle" type="Label" parent="UI/GameOverPanel/VBox"]
+[node name="OverTitle" type="Label" parent="UI/GameOverPanel/VBox" unique_id=1940196307]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 36
 theme_override_colors/font_color = Color(1, 0.3, 0.25, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 8
-horizontal_alignment = 1
+theme_override_font_sizes/font_size = 36
 text = "IMPEACHED!"
+horizontal_alignment = 1
 
-[node name="OverSub" type="Label" parent="UI/GameOverPanel/VBox"]
+[node name="OverSub" type="Label" parent="UI/GameOverPanel/VBox" unique_id=706459305]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
-horizontal_alignment = 1
 text = "Too many serious questions were asked."
+horizontal_alignment = 1
 
-[node name="FinalLabel" type="Label" parent="UI/GameOverPanel/VBox"]
+[node name="FinalLabel" type="Label" parent="UI/GameOverPanel/VBox" unique_id=1470717441]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
-horizontal_alignment = 1
 text = "Final Score: 0"
+horizontal_alignment = 1
 
-[node name="NameRow" type="HBoxContainer" parent="UI/GameOverPanel/VBox"]
+[node name="NameRow" type="HBoxContainer" parent="UI/GameOverPanel/VBox" unique_id=91452660]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_constants/separation = 10
 
-[node name="NameHint" type="Label" parent="UI/GameOverPanel/VBox/NameRow"]
+[node name="NameHint" type="Label" parent="UI/GameOverPanel/VBox/NameRow" unique_id=1626420382]
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "INITIALS:"
 
-[node name="NameEdit" type="LineEdit" parent="UI/GameOverPanel/VBox/NameRow"]
+[node name="NameEdit" type="LineEdit" parent="UI/GameOverPanel/VBox/NameRow" unique_id=1349968392]
 unique_name_in_owner = true
-layout_mode = 2
 custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
 theme_override_font_sizes/font_size = 20
-max_length = 3
 placeholder_text = "AAA"
+max_length = 3
 
-[node name="SubmitButton" type="Button" parent="UI/GameOverPanel/VBox/NameRow"]
+[node name="SubmitButton" type="Button" parent="UI/GameOverPanel/VBox/NameRow" unique_id=1047133761]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = " OK "
 
-[node name="BoardOverLabel" type="Label" parent="UI/GameOverPanel/VBox"]
+[node name="BoardOverLabel" type="Label" parent="UI/GameOverPanel/VBox" unique_id=720260682]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
 theme_override_colors/font_color = Color(0.6, 1, 0.7, 1)
-horizontal_alignment = 1
+theme_override_font_sizes/font_size = 16
 text = "— HIGH SCORES —"
+horizontal_alignment = 1
 
-[node name="RetryButton" type="Button" parent="UI/GameOverPanel/VBox"]
+[node name="RetryButton" type="Button" parent="UI/GameOverPanel/VBox" unique_id=295364190]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 26
 text = "  RUN AGAIN  "
 
-[node name="CRTLayer" type="CanvasLayer" parent="."]
+[node name="CRTLayer" type="CanvasLayer" parent="." unique_id=1838840271]
 layer = 99
 
-[node name="CRTOverlay" type="ColorRect" parent="CRTLayer"]
+[node name="CRTOverlay" type="ColorRect" parent="CRTLayer" unique_id=250751026]
 material = SubResource("crt_mat")
 anchors_preset = 15
 anchor_right = 1.0
@@ -242,4 +242,3 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(1, 1, 1, 1)
