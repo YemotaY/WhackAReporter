@@ -35,6 +35,11 @@ var hole_qa := {}  # Hole -> qa id currently being asked
 var hammer: Hammer
 var voice: VoiceBox
 
+const SYMBOL_FONT := preload(
+	"res://fonts/Noto_Sans_Symbols_2/NotoSansSymbols2-Regular.ttf"
+)
+
+
 @onready var sfx := {
 	"whack": preload("res://assets/sfx/whack.wav"),
 	"pop": preload("res://assets/sfx/pop.wav"),
@@ -105,6 +110,8 @@ func _build_link_buttons() -> void:
 		btn.add_theme_font_size_override("font_size", 16)
 		btn.tooltip_text = entry[1]
 		btn.pressed.connect(OS.shell_open.bind(entry[1]))
+		btn.add_theme_font_size_override("font_size", 16)
+		btn.add_theme_font_override("font", SYMBOL_FONT)
 		link_row.add_child(btn)
 
 
