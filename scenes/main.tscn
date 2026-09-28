@@ -17,6 +17,9 @@ corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 corner_detail = 5
 
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_jyhfs"]
+load_path = "res://.godot/imported/whackareport_splashscreen.png-581bcad05f64833ecc7e98c12cd8d0fc.ctex"
+
 [sub_resource type="ShaderMaterial" id="crt_mat"]
 shader = ExtResource("2_crt")
 shader_parameter/scanline_strength = 0.18
@@ -114,6 +117,11 @@ offset_bottom = 329.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_sugp2")
+
+[node name="TextureRect" type="TextureRect" parent="UI/MenuPanel" unique_id=163100785]
+modulate = Color(1, 1, 1, 0.1254902)
+layout_mode = 2
+texture = SubResource("CompressedTexture2D_jyhfs")
 
 [node name="VBox" type="VBoxContainer" parent="UI/MenuPanel" unique_id=581862955]
 layout_mode = 2

@@ -15,6 +15,7 @@ run/main_scene="res://scenes/main.tscn"
 run/disable_stdout=true
 run/disable_stderr=true
 config/features=PackedStringArray("4.7", "GL Compatibility")
+boot_splash/image="uid://bocuq8peo48nf"
 config/icon="uid://drkc4es8dmwtg"
 
 [display]

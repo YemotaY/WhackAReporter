@@ -6,6 +6,9 @@ your gavel before their question ring fills up, or your approval drops!
 
 ![Godot 4.7](https://img.shields.io/badge/Godot-4.7-blue) ![License: MIT](https://img.shields.io/badge/License-MIT-green)
 
+![Itch.io preview](image.png)
+
+
 ## How to Play
 
 | Action | Input |
@@ -24,6 +27,11 @@ your gavel before their question ring fills up, or your approval drops!
   - Level 6+: podiums also bob vertically
   - Each new level restores one ❤ Approval (max 5)
 - **Local leaderboard**: top-10 arcade high scores with 3-letter initials, saved to `user://leaderboard.json`.
+
+## Previews
+
+![Screenshot preview 1](assets/images/Bildschirmfoto_20260928_224002.png)
+![Screenshot preview 1](assets/images/Bildschirmfoto_20260928_224056.png)
 
 ## Run
 
