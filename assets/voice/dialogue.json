@@ -1,0 +1,433 @@
+[
+	{
+		"de": {
+			"comment": "Whack-A-Reporter dialogue. Edit text here, then run tools/tts_pipeline.py (Piper neural TTS) to regenerate WAVs. 'qa' pairs drive gameplay: reporter asks the question when popping up; if bonked the president speaks the answer.",
+			"lines": {
+				"prez_start": {
+					"speaker": "president",
+					"text": "Sehr geehrte Familie Monopol, insbesondere sehr geehrte Frau Vorstand der Anteilhaber, \nsehr geehrte Mitglieder des Gesellschafterausschusses, des Aufsichtsrates und des Vorstands, \nvor allem lieber CEO. Es ist mir eine Ehre Sie alle hier begrüßen zu dürfen. \nAchja und diese nervigen Reporter."
+				},
+				"prez_over": {
+					"speaker": "president",
+					"text": "Verloren? Nein, nein.\nWir haben lediglich die politische Realität neu bewertet.\nDas ist etwas völlig anderes."
+				},
+				"prez_won": {
+					"speaker": "president",
+					"text": "Vier weitere Jahre die eigenen und die der Familie, \nmit bester Lobbyarbeit und schlimmster Gesetzgebung füllen."
+				},
+				"prez_whack1": {
+					"speaker": "president",
+					"text": "Für das Stadtbild!"
+				},
+				"prez_whack2": {
+					"speaker": "president",
+					"text": "Das sagt die AFD doch auch!"
+				},
+				"prez_whack3": {
+					"speaker": "president",
+					"text": "Daran kann ich mich leider nicht mehr erinnern!"
+				},
+				"prez_taunt1": {
+					"speaker": "president",
+					"text": "Ich bin ein Freund klarer Worte.\nInsbesondere dann, wenn ich sie vorher formuliert habe und die Lobby \nnicht wieder alles Umschreiben will."
+				},
+				"prez_level2": {
+					"speaker": "president",
+					"text": "Sie werden hektisch.\nDeutschland braucht jetzt aber vor allem eines: Mehr Steuern, Arbeit und den Grenzschutz."
+				}
+			},
+			"qa": [
+				{
+					"id": "whatever",
+					"question": {
+						"speaker": "reporter1",
+						"text": "Erst hieß es Schuldenbremse um jeden Preis. \nWas ist aus der auf einmal geworden?"
+					},
+					"answer": {
+						"speaker": "president",
+						"text": "Mein Privatjet tankt sich nicht von alleine. \nNächste Frage."
+					}
+				},
+				{
+					"id": "debt_turn",
+					"question": {
+						"speaker": "reporter2",
+						"text": "Im Wahlkampf klang Ihre Finanzpolitik deutlich sparsamer. \nWas ist passiert?"
+					},
+					"answer": {
+						"speaker": "president",
+						"text": "Ich habe Ihnen gelehrt was das wort Doppelmoral bedeutet."
+					}
+				},
+				{
+					"id": "fivehundred",
+					"question": {
+						"speaker": "reporter1",
+						"text": "Warum werden die Infrastruktur und Leistungen \nfür die die Sie Finanzieren immer unerträglicher?"
+					},
+					"answer": {
+						"speaker": "president",
+						"text": "Die Ehrliche Antwort auf diese Frage für die Bevölkerung verunserichern."
+					}
+				},
+				{
+					"id": "economy",
+					"question": {
+						"speaker": "reporter2",
+						"text": "Sie wollten Deutschland zum wirtschaftlichen \nMotor Europas machen. Wo ist der Motor?"
+					},
+					"answer": {
+						"speaker": "president",
+						"text": "Der Motor läuft.\nEr läuft nur derzeit mit etwas weniger deutscher Gründlichkeit als vorgesehen.\nAber wir werden ihn wieder auf Touren bringen."
+					}
+				},
+				{
+					"id": "blackrock",
+					"question": {
+						"speaker": "reporter1",
+						"text": "Sie kommen aus der Finanzwelt und waren früher bei BlackRock. \nIst das eigentlich noch Politik oder schon ein Investmentseminar?"
+					},
+					"answer": {
+						"speaker": "president",
+						"text": "Ich habe dort gelernt, dass man Risiken ernst nehmen muss.\nDeshalb nehmen wir jetzt auch fünfhundert Milliarden Euro sehr ernst."
+					}
+				},
+				{
+					"id": "migration",
+					"question": {
+						"speaker": "reporter2",
+						"text": "Sie sprechen häufig von einer Begrenzung der Migration. \nWas heißt das konkret?"
+					},
+					"answer": {
+						"speaker": "president",
+						"text": "Es heißt, dass Regeln gelten.\nUnd wenn Regeln gelten, müssen sie auch umgesetzt werden.\nIch weiß, das ist ein revolutionäres Konzept."
+					}
+				},
+				{
+					"id": "firewall",
+					"question": {
+						"speaker": "reporter1",
+						"text": "Sie haben vor der Wahl eine Zusammenarbeit mit der AfD ausgeschlossen.\n Wie wichtig ist diese sogenannte Brandmauer?"
+					},
+					"answer": {
+						"speaker": "president",
+						"text": "Sehr wichtig.\nEine Brandmauer ist schließlich eine ziemlich klare Angelegenheit.\nMan baut sie auf und hofft, dass niemand mit einem Bagger kommt."
+					}
+				},
+				{
+					"id": "greens",
+					"question": {
+						"speaker": "reporter2",
+						"text": "Für Ihre Finanzpläne brauchten Sie Stimmen der Grünen. \nWie fühlt sich das an?"
+					},
+					"answer": {
+						"speaker": "president",
+						"text": "Politik bedeutet, Mehrheiten zu organisieren.\nManchmal braucht man dafür Menschen, deren Politik man vorher ausdrücklich nicht machen wollte.\nDas nennt man parlamentarische Mathematik."
+					}
+				},
+				{
+					"id": "schulden",
+					"question": {
+						"speaker": "reporter1",
+						"text": "Sie sagten früher sinngemäß,\n Schulden seien die Steuererhöhungen von morgen.\n Sind die heutigen Schulden jetzt die Steuererhöhungen von übermorgen?"
+					},
+					"answer": {
+						"speaker": "president",
+						"text": "Das ist eine interessante Frage.\nAber wir sollten nicht jede finanzpolitische Entscheidung auf einen einzigen Satz reduzieren.\nSonst müsste ich meine alten Reden noch einmal lesen."
+					}
+				},
+				{
+					"id": "whatever_again",
+					"question": {
+						"speaker": "reporter2",
+						"text": "Was bedeutet 'whatever it takes' eigentlich auf Deutsch?"
+					},
+					"answer": {
+						"speaker": "president",
+						"text": "Was immer nötig ist.\nDas ist eine sehr präzise Formulierung.\nBesonders wenn man noch nicht genau weiß, was am Ende nötig sein wird."
+					}
+				},
+				{
+					"id": "merkel",
+					"question": {
+						"speaker": "reporter1",
+						"text": "Sie wollten sich politisch deutlich von Angela Merkel absetzen.\n Was haben Sie von ihr gelernt?"
+					},
+					"answer": {
+						"speaker": "president",
+						"text": "Dass man sehr lange regieren kann, wenn man möglichst wenig erklärt.\nIch persönlich bevorzuge allerdings die ausführliche Variante."
+					}
+				},
+				{
+					"id": "wirtschaft",
+					"question": {
+						"speaker": "reporter2",
+						"text": "Sie wurden als Wirtschaftsfachmann angekündigt.\n Warum muss die Wirtschaft dann noch immer gerettet werden?"
+					},
+					"answer": {
+						"speaker": "president",
+						"text": "Gerade weil ich Wirtschaftsfachmann bin.\nEin echter Fachmann erkennt schließlich, wenn etwas kompliziert ist.\nUnd Deutschland ist momentan ausgesprochen kompliziert."
+					}
+				}
+			]
+		}
+	},
+	{
+		"en": {
+			"comment": "Whack-A-Reporter dialogue. Edit text here, then run tools/tts_pipeline.py (Piper neural TTS) to regenerate WAVs. 'qa' pairs drive gameplay: reporter asks the question when popping up; if bonked the president speaks the answer.",
+			"lines": {
+				"prez_start": {
+					"speaker": "president",
+					"text": "Welcome, welcome. This press briefing is about me, \nthe greatest president, possibly of all time.\n Keep your questions short, wrong, and unasked."
+				},
+				"prez_over": {
+					"speaker": "president",
+					"text": "Impeached? I am being impeached bigly. \nThis is the most unfair thing since my golf handicap."
+				},
+				"prez_won": {
+					"speaker": "president",
+					"text": "Four more years! The reporters are gone and I answered nothing. \nA perfect term."
+				},
+				"prez_whack1": {
+					"speaker": "president",
+					"text": "Fake news!"
+				},
+				"prez_whack2": {
+					"speaker": "president",
+					"text": "Next question!"
+				},
+				"prez_whack3": {
+					"speaker": "president",
+					"text": "Wrong!"
+				},
+				"prez_taunt1": {
+					"speaker": "president",
+					"text": "Nobody dodges questions better than me. Everybody says so."
+				},
+				"prez_level2": {
+					"speaker": "president",
+					"text": "They are moving now? Tremendous cowards. Sad!"
+				}
+			},
+			"qa": [
+				{
+					"id": "docs",
+					"question": {
+						"speaker": "reporter1",
+						"text": "Mister President, why were classified documents found in your golf bag?"
+					},
+					"answer": {
+						"speaker": "president",
+						"text": "Those were my scorecards. Very classified scorecards. \nNobody shoots a sixty-eight like me."
+					}
+				},
+				{
+					"id": "economy",
+					"question": {
+						"speaker": "reporter2",
+						"text": "Sir, the economy shrank by nine percent this quarter. Your comment?"
+					},
+					"answer": {
+						"speaker": "president",
+						"text": "Wrong. It grew by minus nine percent. That is growth. Look it up, sweetheart."
+					}
+				},
+				{
+					"id": "climate",
+					"question": {
+						"speaker": "reporter1",
+						"text": "Scientists say the climate report is alarming. Have you read it?"
+					},
+					"answer": {
+						"speaker": "president",
+						"text": "I never read alarming things.\n That is how I stay so incredibly calm and handsome."
+					}
+				},
+				{
+					"id": "healthcare",
+					"question": {
+						"speaker": "reporter2",
+						"text": "Your new healthcare plan appears to be a coupon for soup. Elaborate?"
+					},
+					"answer": {
+						"speaker": "president",
+						"text": "It is beautiful soup.\n Very affordable.\n The finest soup-based healthcare in the world."
+					}
+				},
+				{
+					"id": "ethics",
+					"question": {
+						"speaker": "reporter1",
+						"text": "The ethics committee says you fired the entire ethics committee. True?"
+					},
+					"answer": {
+						"speaker": "president",
+						"text": "There is no ethics committee, so who is asking? Exactly. Next question."
+					}
+				},
+				{
+					"id": "polls",
+					"question": {
+						"speaker": "reporter2",
+						"text": "Polls show ninety percent of citizens disapprove of your performance."
+					},
+					"answer": {
+						"speaker": "president",
+						"text": "Fake polls.\n My internal numbers show one hundred and ten percent approval. \nTremendous math."
+					}
+				},
+				{
+					"id": "treasury",
+					"question": {
+						"speaker": "reporter1",
+						"text": "Why does your cousin with no banking experience run the treasury?"
+					},
+					"answer": {
+						"speaker": "president",
+						"text": "Kevin is family. Family is trust.\n Trust is money. The treasury is money. \nIt is all connected."
+					}
+				},
+				{
+					"id": "billions",
+					"question": {
+						"speaker": "reporter2",
+						"text": "Can you explain the missing forty billion dollars from the budget?"
+					},
+					"answer": {
+						"speaker": "president",
+						"text": "It is not missing.\n It is exploring. Money needs freedom. \nThat is called capitalism."
+					}
+				}
+			]
+		}
+	},
+	{
+		"fr": {
+			"comment": "Whack-A-Reporter dialogue. Edit text here, then run tools/tts_pipeline.py (Piper neural TTS) to regenerate WAVs. 'qa' pairs drive gameplay: reporter asks the question when popping up; if bonked the president speaks the answer.",
+			"lines": {
+				"prez_start": {
+					"speaker": "president",
+					"text": "Welcome, welcome. This press briefing is about me, \nthe greatest president, possibly of all time.\n Keep your questions short, wrong, and unasked."
+				},
+				"prez_over": {
+					"speaker": "president",
+					"text": "Impeached? I am being impeached bigly. \nThis is the most unfair thing since my golf handicap."
+				},
+				"prez_won": {
+					"speaker": "president",
+					"text": "Four more years! The reporters are gone and I answered nothing. \nA perfect term."
+				},
+				"prez_whack1": {
+					"speaker": "president",
+					"text": "Fake news!"
+				},
+				"prez_whack2": {
+					"speaker": "president",
+					"text": "Next question!"
+				},
+				"prez_whack3": {
+					"speaker": "president",
+					"text": "Wrong!"
+				},
+				"prez_taunt1": {
+					"speaker": "president",
+					"text": "Nobody dodges questions better than me.\n Everybody says so."
+				},
+				"prez_level2": {
+					"speaker": "president",
+					"text": "They are moving now? \nTremendous cowards. Sad!"
+				}
+			},
+			"qa": [
+				{
+					"id": "docs",
+					"question": {
+						"speaker": "reporter1",
+						"text": "Mister President,\n why were classified documents found in your golf bag?"
+					},
+					"answer": {
+						"speaker": "president",
+						"text": "Those were my scorecards. Very classified scorecards. \nNobody shoots a sixty-eight like me."
+					}
+				},
+				{
+					"id": "economy",
+					"question": {
+						"speaker": "reporter2",
+						"text": "Sir, the economy shrank by nine percent this quarter. Your comment?"
+					},
+					"answer": {
+						"speaker": "president",
+						"text": "Wrong. It grew by minus nine percent.\n That is growth. Look it up, sweetheart."
+					}
+				},
+				{
+					"id": "climate",
+					"question": {
+						"speaker": "reporter1",
+						"text": "Scientists say the climate report is alarming.\n Have you read it?"
+					},
+					"answer": {
+						"speaker": "president",
+						"text": "I never read alarming things. \nThat is how I stay so incredibly calm and handsome."
+					}
+				},
+				{
+					"id": "healthcare",
+					"question": {
+						"speaker": "reporter2",
+						"text": "Your new healthcare plan appears\n to be a coupon for soup. Elaborate?"
+					},
+					"answer": {
+						"speaker": "president",
+						"text": "It is beautiful soup. Very affordable. \nThe finest soup-based healthcare in the world."
+					}
+				},
+				{
+					"id": "ethics",
+					"question": {
+						"speaker": "reporter1",
+						"text": "The ethics committee says you fired the entire ethics committee. True?"
+					},
+					"answer": {
+						"speaker": "president",
+						"text": "There is no ethics committee, so who is asking? Exactly. Next question."
+					}
+				},
+				{
+					"id": "polls",
+					"question": {
+						"speaker": "reporter2",
+						"text": "Polls show ninety percent of citizens disapprove of your performance."
+					},
+					"answer": {
+						"speaker": "president",
+						"text": "Fake polls. My internal numbers show one hundred and ten percent approval. \nTremendous math."
+					}
+				},
+				{
+					"id": "treasury",
+					"question": {
+						"speaker": "reporter1",
+						"text": "Why does your cousin with no banking experience run the treasury?"
+					},
+					"answer": {
+						"speaker": "president",
+						"text": "Kevin is family. Family is trust. Trust is money. The treasury is money. \nIt is all connected."
+					}
+				},
+				{
+					"id": "billions",
+					"question": {
+						"speaker": "reporter2",
+						"text": "Can you explain the missing forty billion dollars from the budget?"
+					},
+					"answer": {
+						"speaker": "president",
+						"text": "It is not missing. It is exploring. Money needs freedom. \nThat is called capitalism."
+					}
+				}
+			]
+		}
+	}
+]
