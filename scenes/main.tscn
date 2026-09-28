@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dvo7u465li6nh" path="res://scripts/main.gd" id="1_main"]
 [ext_resource type="Shader" uid="uid://dpl4ehkul47n7" path="res://assets/crt_overlay.gdshader" id="2_crt"]
+[ext_resource type="FontFile" uid="uid://j12f6ndscf7c" path="res://fonts/Noto_Sans_Symbols_2/NotoSansSymbols2-Regular.ttf" id="2_jyhfs"]
 [ext_resource type="Script" uid="uid://dhp8f4hq1y8n1" path="res://scenes/LanguageController.gd" id="2_sugp2"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sugp2"]
@@ -46,6 +47,7 @@ offset_bottom = 52.0
 theme_override_colors/font_color = Color(1, 0.4, 0.4, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 6
+theme_override_fonts/font = ExtResource("2_jyhfs")
 theme_override_font_sizes/font_size = 28
 text = "LIVES"
 horizontal_alignment = 2
@@ -140,6 +142,7 @@ autowrap_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+theme_override_fonts/font = ExtResource("2_jyhfs")
 theme_override_font_sizes/font_size = 18
 text = "INSERTCOIN"
 horizontal_alignment = 1
