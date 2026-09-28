@@ -192,14 +192,14 @@ func _enter_level(new_level: int) -> void:
 	lives = mini(lives + 1, START_LIVES + 2)  # small approval bonus per term stage
 	match level:
 		2:
-			voice.say("prez_level2")
+			voice.say("prez_level2_"+ TranslationServer.get_locale().rsplit("_")[0])
 			_spawn_banner("LEVEL 2 — THEY'RE MOVING!")
 		5:
 			_spawn_banner("LEVEL 5 — MIDTERMS! FASTER!")
-			voice.say("prez_taunt1")
+			voice.say("prez_taunt1_"+ TranslationServer.get_locale().rsplit("_")[0])
 		MAX_LEVEL:
 			_spawn_banner("FINAL LEVEL — LAME DUCK FURY!")
-			voice.say("prez_taunt1")
+			voice.say("prez_taunt1_"+ TranslationServer.get_locale().rsplit("_")[0])
 		_:
 			_spawn_banner("LEVEL %d" % level)
 	_play("start")
@@ -268,12 +268,16 @@ func _spawn_reporter() -> void:
 		if voice.is_talking():
 			return
 		var unheard: Array[String] = []
+		var locale := TranslationServer.get_locale().rsplit("_")[0]
 		for id in voice.qa_ids:
 			if not heard_qa.has(id):
-				unheard.append(id)
+				if id.ends_with("_" + locale) and not heard_qa.has(id):
+					unheard.append(id)
+		#push_error("unheard " + str(unheard))
 		var qa_id: String = unheard[randi() % unheard.size()]
 		heard_qa[qa_id] = true
 		hole_qa[hole] = qa_id
+		#push_error("Next question " + qa_id)
 		# Hit window = full spoken question length + grace, so it plays out.
 		var q_time: float = maxf(voice.question_duration(qa_id) + 1.2, 1.2)
 		hole.pop_up(0.25, q_time)
@@ -315,7 +319,7 @@ func _on_whacked(hole: Hole) -> void:
 		voice.answer_question(hole_qa[hole])
 		hole_qa.erase(hole)
 	elif arcade_mode and not voice.is_talking() and randf() < 0.3:
-		voice.say_random("prez_whack", 3)
+		voice.say_random("prez_whack_"+ TranslationServer.get_locale().rsplit("_")[0], 3)
 	_update_hud()
 
 func _on_question_asked(hole: Hole) -> void:
@@ -331,7 +335,7 @@ func _game_over() -> void:
 	game_state = GameState.GAME_OVER
 	_end_round("IMPEACHED!", "Too many serious questions were asked.")
 	_play("fail")
-	voice.say("prez_over")
+	voice.say("prez_over_"+ TranslationServer.get_locale().rsplit("_")[0])
 
 func _victory() -> void:
 	game_state = GameState.VICTORY

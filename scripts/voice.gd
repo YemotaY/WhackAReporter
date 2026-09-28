@@ -56,7 +56,7 @@ func say(key: String) -> void:
 
 	if not _lines.has(key):
 		return
-	
+
 	var line: Dictionary = _lines[key]
 	#push_error("line : " + str(line))
 	#push_error("key : " + key)
@@ -70,8 +70,9 @@ func say_random(prefix: String, count: int) -> void:
 	say("%s%d" % [prefix, randi() % count + 1])
 
 func random_qa() -> String:
-	#push_error("random_qa: ")
-	return qa_ids[randi() % qa_ids.size()]
+	var target = qa_ids[randi() % qa_ids.size()]
+	#push_error("random_qa target: " + target)
+	return target
 
 func ask_question(qa_id: String) -> void:
 	#push_error("ask_question: " + qa_id)
