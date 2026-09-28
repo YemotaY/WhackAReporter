@@ -96,9 +96,9 @@ func _build_link_buttons() -> void:
 	vbox.add_child(link_row)
 
 	for entry in [
-		["⭐ GitHub", URL_GITHUB],
-		["▶ itch.io", URL_ITCH],
-		["❤ " + tr("DONATE"), URL_PAYPAL],
+		["★ GitHub", URL_GITHUB],
+		["► itch.io", URL_ITCH],
+		["♥ " + tr("DONATE"), URL_PAYPAL],
 	]:
 		var btn := Button.new()
 		btn.text = " %s " % entry[0]
