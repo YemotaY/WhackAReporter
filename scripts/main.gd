@@ -281,6 +281,12 @@ func _spawn_reporter() -> void:
 				if id.ends_with("_" + locale) and not heard_qa.has(id):
 					unheard.append(id)
 		#push_error("unheard " + str(unheard))
+		if unheard.is_empty():
+			arcade_mode = true
+			vocal_timer = _vocal_interval()
+			_spawn_banner("NO MORE QUESTIONS — WHACK!")
+			return
+
 		var qa_id: String = unheard[randi() % unheard.size()]
 		heard_qa[qa_id] = true
 		hole_qa[hole] = qa_id
