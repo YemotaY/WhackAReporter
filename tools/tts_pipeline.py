@@ -114,7 +114,7 @@ def main() -> int:
 
         for text, speaker, fname in jobs:
             out = os.path.join(VOICE_DIR, lang ,fname)
-            synth(text, speaker, out)
+            synth(text.replace("\n",""), speaker, out)
             print(f"wrote assets/voice/{lang}/{fname}  [{speaker}]")
     print("done.")
     return 0

@@ -83,7 +83,7 @@ func _ready() -> void:
 	menu_panel.visible = true
 	game_over_panel.visible = false
 	%Klassisch.pressed.connect(_start_game)
-	%Trial.pressed.connect(_start_game)
+	%Trial.pressed.connect(_start_game_trial)
 	%RetryButton.pressed.connect(_start_game)
 	%SubmitButton.pressed.connect(_submit_score)
 	name_edit.text_submitted.connect(func(_t): _submit_score())
@@ -145,6 +145,31 @@ func _build_holes() -> void:
 			add_child(hole)
 			holes.append(hole)
 			hole_base_pos.append(hole.position)
+
+func _start_game_trial() -> void:
+	score = 0
+	lives = START_LIVES
+	combo = 0
+	elapsed = 0.0
+	spawn_timer = 0.6
+	level = 1
+	game_state = GameState.PLAYING
+	menu_panel.visible = false
+	game_over_panel.visible = false
+	language_selection.visible = false
+	hole_qa.clear()
+	heard_qa.clear()
+	arcade_mode = true
+	vocal_timer = 0.0
+	for i in holes.size():
+		holes[i].force_sink()
+		holes[i].position = hole_base_pos[i]
+	_play("start")
+
+	#voice.say("prez_start_" + TranslationServer.get_locale().rsplit("_")[0] )
+	# Give the opening monologue room before the first reporter pops.
+	spawn_timer = 6.0
+	_update_hud()
 
 func _start_game() -> void:
 	score = 0

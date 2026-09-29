@@ -12,6 +12,7 @@ const VOICE_DIR := "res://assets/voice/"
 
 var subtitle_label: Label
 var qa_ids: Array[String] = []
+var heard_qa := {}          # qa_id -> true, once its question played fully
 
 var _lines := {}  # key -> {stream, text, is_prez}
 var _player: AudioStreamPlayer
@@ -70,9 +71,18 @@ func say_random(prefix: String, count: int) -> void:
 	say("%s%d" % [prefix, randi() % count + 1])
 
 func random_qa() -> String:
-	var target = qa_ids[randi() % qa_ids.size()]
-	#push_error("random_qa target: " + target)
+	var locale = TranslationServer.get_locale().rsplit("_")[0]
+	var available_ids = qa_ids.filter(func(id):
+		return id.ends_with("_" + locale) and not heard_qa.has(id)
+	)
+	if available_ids.is_empty():
+		#push_error("No unheard QA entries found for locale: " + locale)
+		return ""
+	var target = available_ids[randi() % available_ids.size()]
+	heard_qa[target] = true
 	return target
+
+
 
 func ask_question(qa_id: String) -> void:
 	#push_error("ask_question: " + qa_id)
