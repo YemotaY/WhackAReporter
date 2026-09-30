@@ -4,6 +4,7 @@
 [ext_resource type="Shader" uid="uid://dpl4ehkul47n7" path="res://assets/crt_overlay.gdshader" id="2_crt"]
 [ext_resource type="FontFile" uid="uid://j12f6ndscf7c" path="res://fonts/Noto_Sans_Symbols_2/NotoSansSymbols2-Regular.ttf" id="2_jyhfs"]
 [ext_resource type="Script" uid="uid://dhp8f4hq1y8n1" path="res://scenes/LanguageController.gd" id="2_sugp2"]
+[ext_resource type="Texture2D" uid="uid://hs7koas41j6l" path="res://assets/images/shop-cart-svgrepo-com.svg" id="3_tbgi4"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sugp2"]
 content_margin_left = 0.0
@@ -19,6 +20,30 @@ corner_detail = 5
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_jyhfs"]
 load_path = "res://.godot/imported/whackareport_splashscreen.png-581bcad05f64833ecc7e98c12cd8d0fc.ctex"
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jyhfs"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(5.631298e-06, 0.6247566, 0, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tbgi4"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(1, 0, 0, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
 
 [sub_resource type="ShaderMaterial" id="crt_mat"]
 shader = ExtResource("2_crt")
@@ -140,6 +165,9 @@ vertical_alignment = 1
 
 [node name="Subtitle" type="Label" parent="UI/MenuPanel/VBox" unique_id=719474587]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.101960786, 0.101960786, 1)
+theme_override_colors/font_outline_color = Color(1, 0.8509804, 0.2, 1)
+theme_override_constants/outline_size = 10
 theme_override_font_sizes/font_size = 18
 text = "SUBTITLE"
 horizontal_alignment = 1
@@ -161,9 +189,11 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(1, 0.8509804, 0.2, 1)
-theme_override_colors/font_outline_color = Color(1, 0.17000002, 0.17000002, 1)
-theme_override_constants/outline_size = 5
+theme_override_colors/icon_focus_color = Color(0, 0.54509807, 0, 1)
+theme_override_colors/icon_hover_color = Color(1.2995303e-06, 0.5452579, 9.62615e-08, 1)
+theme_override_constants/outline_size = 10
 theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource("StyleBoxFlat_jyhfs")
 text = "STARTBUTTON"
 
 [node name="Trial" type="Button" parent="UI/MenuPanel/VBox" unique_id=1347102668]
@@ -171,15 +201,17 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(1, 0.8509804, 0.2, 1)
-theme_override_colors/font_outline_color = Color(1, 0.17000002, 0.17000002, 1)
-theme_override_constants/outline_size = 5
+theme_override_colors/icon_focus_color = Color(1, 0, 0, 1)
+theme_override_colors/icon_hover_color = Color(1, 0, 0, 1)
+theme_override_constants/outline_size = 10
 theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource("StyleBoxFlat_tbgi4")
 text = "STARTBUTTONTRIAL"
 
 [node name="BoardMenuLabel" type="Label" parent="UI/MenuPanel/VBox" unique_id=104186158]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.6, 1, 0.7, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 16
 text = "HIGHSCORES"
 horizontal_alignment = 1
@@ -191,7 +223,7 @@ theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
 theme_override_colors/font_outline_color = Color(0.6, 0.1, 0.1, 1)
 theme_override_constants/outline_size = 10
 theme_override_font_sizes/font_size = 24
-text = "V1.1.4"
+text = "V1.1.6"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -278,6 +310,93 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 26
 text = "  RUN AGAIN  "
+
+[node name="ShopPanel" type="PanelContainer" parent="UI" unique_id=1033777944]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -270.0
+offset_top = -270.0
+offset_right = 270.0
+offset_bottom = 270.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="UI/ShopPanel" unique_id=553388510]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="OverTitle" type="Label" parent="UI/ShopPanel/VBox" unique_id=1175950626]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.3, 0.25, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 36
+text = "IMPEACHED!"
+horizontal_alignment = 1
+
+[node name="OverSub" type="Label" parent="UI/ShopPanel/VBox" unique_id=684097090]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Too many serious questions were asked."
+horizontal_alignment = 1
+
+[node name="FinalLabel" type="Label" parent="UI/ShopPanel/VBox" unique_id=23965913]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Final Score: 0"
+horizontal_alignment = 1
+
+[node name="NameRow" type="HBoxContainer" parent="UI/ShopPanel/VBox" unique_id=60981002]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 10
+
+[node name="NameHint" type="Label" parent="UI/ShopPanel/VBox/NameRow" unique_id=265315085]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "INITIALS:"
+
+[node name="NameEdit" type="LineEdit" parent="UI/ShopPanel/VBox/NameRow" unique_id=1448314456]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+placeholder_text = "AAA"
+max_length = 3
+
+[node name="SubmitButton" type="Button" parent="UI/ShopPanel/VBox/NameRow" unique_id=1590558410]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = " OK "
+
+[node name="BoardOverLabel" type="Label" parent="UI/ShopPanel/VBox" unique_id=1698762319]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 1, 0.7, 1)
+theme_override_font_sizes/font_size = 16
+text = "— HIGH SCORES —"
+horizontal_alignment = 1
+
+[node name="RetryButton" type="Button" parent="UI/ShopPanel/VBox" unique_id=370468214]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 26
+text = "  RUN AGAIN  "
+
+[node name="ShopButton" type="TextureButton" parent="UI" unique_id=1421146962]
+unique_name_in_owner = true
+visible = false
+offset_left = 855.0
+offset_top = 16.999996
+offset_right = 1655.0
+offset_bottom = 817.0
+scale = Vector2(0.1, 0.1)
+offset_transform_scale = Vector2(0.1, 0.1)
+texture_normal = ExtResource("3_tbgi4")
 
 [node name="LanguageSelect" type="OptionButton" parent="UI" unique_id=1387703254]
 unique_name_in_owner = true

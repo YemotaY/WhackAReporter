@@ -86,11 +86,16 @@ func _ready() -> void:
 	%Trial.pressed.connect(_start_game_trial)
 	%RetryButton.pressed.connect(_start_game)
 	%SubmitButton.pressed.connect(_submit_score)
+	%ShopButton.pressed.connect(open_shop)
 	name_edit.text_submitted.connect(func(_t): _submit_score())
 	_blink_coin_label()
 	_build_link_buttons()
 	_refresh_board_labels()
 	_update_hud()
+
+func open_shop():
+	push_error("Shop request")
+	pass
 
 func _build_link_buttons() -> void:
 	link_row = HBoxContainer.new()
