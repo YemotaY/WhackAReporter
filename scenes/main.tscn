@@ -381,12 +381,6 @@ size_flags_vertical = 3
 [node name="ShopItemList" type="VScrollBar" parent="UI/ShopPanel/VBox/ScrollContainer" unique_id=745973543]
 layout_mode = 2
 
-[node name="ShopItemCard" parent="UI/ShopPanel/VBox/ScrollContainer/ShopItemList" unique_id=325700081 instance=ExtResource("4_o6xl0")]
-unique_name_in_owner = true
-layout_mode = 0
-offset_right = 909.0
-offset_bottom = 512.0
-
 [node name="ShopButton" type="TextureButton" parent="UI" unique_id=1421146962]
 unique_name_in_owner = true
 visible = false
