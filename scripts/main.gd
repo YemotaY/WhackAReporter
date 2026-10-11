@@ -39,6 +39,20 @@ const SYMBOL_FONT := preload(
 	"res://fonts/Noto_Sans_Symbols_2/NotoSansSymbols2-Regular.ttf"
 )
 
+# Example shop data array
+var shop_inventory = [
+	{
+		"name": "Basic Hammer",
+		"description": "Bonkes like Chef since 60 years.",
+		"texture": preload("res://assets/hammers/Basic_hammer.png")
+	},
+	{
+		"name": "Another Hammer",
+		"description": "Mysterious.",
+		"texture": preload("res://assets/hammers/Basic_hammer.png")
+	}
+]
+
 
 @onready var sfx := {
 	"whack": preload("res://assets/sfx/whack.wav"),
@@ -86,13 +100,13 @@ func _ready() -> void:
 	%Trial.pressed.connect(_start_game_trial)
 	%RetryButton.pressed.connect(_start_game)
 	%SubmitButton.pressed.connect(_submit_score)
-	%ShopButton.pressed.connect(open_shop)
+	#%ShopButton.pressed.connect(open_shop)
 	name_edit.text_submitted.connect(func(_t): _submit_score())
 	_blink_coin_label()
 	_build_link_buttons()
 	_refresh_board_labels()
 	_update_hud()
-
+	
 func open_shop():
 	push_error("Shop request")
 	pass

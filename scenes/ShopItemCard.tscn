@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://ns1clnxisnpt"]
+
+[ext_resource type="Script" uid="uid://br7y1fcmh3dfg" path="res://scenes/shop_item_card.gd" id="1_87dkc"]
+[ext_resource type="Texture2D" uid="uid://drkc4es8dmwtg" path="res://pepicons-pencil--hammer-sledge.png" id="2_mluul"]
+
+[node name="ShopItemCard" type="PanelContainer" unique_id=774700108]
+offset_right = 963.0
+offset_bottom = 642.0
+script = ExtResource("1_87dkc")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=2031365965]
+layout_mode = 2
+alignment = 1
+
+[node name="ItemPreview" type="TextureRect" parent="HBoxContainer" unique_id=1597151533]
+layout_mode = 2
+texture = ExtResource("2_mluul")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=1641678778]
+layout_mode = 2
+alignment = 1
+
+[node name="ItemName" type="Label" parent="HBoxContainer/VBoxContainer" unique_id=1694623644]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.99215686, 0, 1)
+theme_override_font_sizes/font_size = 70
+text = "ItemName"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ItemDescription" type="Label" parent="HBoxContainer/VBoxContainer" unique_id=1071496281]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.99215686, 0, 1)
+text = "- ItemDescription
+- ItemDescription
+- ItemDescription
+ItemDescription- ItemDescription- ItemDescription"
+vertical_alignment = 1
