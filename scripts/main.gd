@@ -39,21 +39,6 @@ const SYMBOL_FONT := preload(
 	"res://fonts/Noto_Sans_Symbols_2/NotoSansSymbols2-Regular.ttf"
 )
 
-# Example shop data array
-var shop_inventory = [
-	{
-		"name": "Basic Hammer",
-		"description": "Bonkes like Chef since 60 years.",
-		"texture": preload("res://assets/hammers/Basic_hammer.png")
-	},
-	{
-		"name": "Another Hammer",
-		"description": "Mysterious.",
-		"texture": preload("res://assets/hammers/Basic_hammer.png")
-	}
-]
-
-
 @onready var sfx := {
 	"whack": preload("res://assets/sfx/whack.wav"),
 	"pop": preload("res://assets/sfx/pop.wav"),
@@ -64,12 +49,16 @@ var shop_inventory = [
 	"tick": preload("res://assets/sfx/tick.wav"),
 }
 
+@onready var hammer_select: OptionButton = %HammerSelect
 @onready var score_label: Label = %ScoreLabel
 @onready var lives_label: Label = %LivesLabel
 @onready var combo_label: Label = %ComboLabel
 @onready var menu_panel: Control = %MenuPanel
 @onready var game_over_panel: Control = %GameOverPanel
 @onready var final_label: Label = %FinalLabel
+@onready var coins_amount_shop: Label = %CoinAmountShop
+@onready var coins_amount_menu: Label = %CoinAmountMenu
+@onready var coins_label_menu: Label = %CoinsLabelMenu
 @onready var level_label: Label = %LevelLabel
 @onready var subtitle_label: Label = %SubtitleLabel
 @onready var coin_label: Label = %CoinLabel
@@ -78,8 +67,11 @@ var shop_inventory = [
 @onready var board_over_label: Label = %BoardOverLabel
 @onready var name_edit: LineEdit = %NameEdit
 @onready var name_row: Control = %NameRow
-@onready var language_selection : OptionButton = $"UI/LanguageSelect"
-
+@onready var language_selection : OptionButton = %LanguageSelect
+@onready var btn_Close_Shop: Button = %ExitShopButton
+@onready var btn_Open_shop: TextureButton = %ShopButton
+@onready var Shop_panel: PanelContainer = %ShopPanel
+@onready var background_image: TextureRect = %BackgroundUI
 
 func _ready() -> void:
 	_load_leaderboard()
@@ -94,23 +86,25 @@ func _ready() -> void:
 	voice = VoiceBox.new()
 	voice.subtitle_label = subtitle_label
 	add_child(voice)
+	background_image.visible = false
 	menu_panel.visible = true
 	game_over_panel.visible = false
 	%Klassisch.pressed.connect(_start_game)
 	%Trial.pressed.connect(_start_game_trial)
 	%RetryButton.pressed.connect(_start_game)
 	%SubmitButton.pressed.connect(_submit_score)
-	#%ShopButton.pressed.connect(open_shop)
+	%ShopButton.pressed.connect(open_shop)
+	%ExitShopButton.pressed.connect(close_shop)
 	name_edit.text_submitted.connect(func(_t): _submit_score())
 	_blink_coin_label()
 	_build_link_buttons()
 	_refresh_board_labels()
 	_update_hud()
 	
-func open_shop():
-	push_error("Shop request")
-	pass
-
+func _refresh_coins():
+	coins_amount_shop.text = str(PlayerClass.money)
+	coins_amount_menu.text = str(PlayerClass.money)
+		
 func _build_link_buttons() -> void:
 	link_row = HBoxContainer.new()
 	link_row.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -173,6 +167,8 @@ func _start_game_trial() -> void:
 	spawn_timer = 0.6
 	level = 1
 	game_state = GameState.PLAYING
+	hammer_select.visible = false
+	background_image.visible = false
 	menu_panel.visible = false
 	game_over_panel.visible = false
 	language_selection.visible = false
@@ -198,6 +194,9 @@ func _start_game() -> void:
 	spawn_timer = 0.6
 	level = 1
 	game_state = GameState.PLAYING
+	hammer_select.visible = false
+	background_image.visible = false
+	%ShopButton.visible = false
 	menu_panel.visible = false
 	game_over_panel.visible = false
 	language_selection.visible = false
@@ -216,6 +215,7 @@ func _start_game() -> void:
 	_update_hud()
 
 func _process(delta: float) -> void:
+	_refresh_coins()
 	if game_state != GameState.PLAYING:
 		return
 	elapsed += delta
@@ -368,6 +368,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func _on_whacked(hole: Hole) -> void:
 	combo += 1
 	score += 100 * combo
+	PlayerClass.money += score
 	_play("whack")
 	_shake()
 	_spawn_score_popup(hole.global_position + Vector2(0, -120), "+%d" % (100 * combo))
@@ -387,6 +388,26 @@ func _on_question_asked(hole: Hole) -> void:
 	_update_hud()
 	if lives <= 0:
 		_game_over()
+
+func open_shop():
+	coins_amount_shop.visible = true
+	coins_amount_menu.visible = false
+	hammer_select.visible = false
+	language_selection.visible = false
+	btn_Open_shop.visible = false
+	menu_panel.visible = false
+	Shop_panel.visible = true
+	
+	Shop_panel.populate_shop(HammerClass.shop_inventory)
+
+func close_shop():
+	coins_amount_shop.visible = false
+	coins_amount_menu.visible = true
+	hammer_select.visible = true
+	language_selection.visible = true
+	btn_Open_shop.visible = true
+	menu_panel.visible = true
+	Shop_panel.visible = false
 
 func _game_over() -> void:
 	game_state = GameState.GAME_OVER

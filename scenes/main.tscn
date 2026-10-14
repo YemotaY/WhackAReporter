@@ -3,11 +3,13 @@
 [ext_resource type="Script" uid="uid://dvo7u465li6nh" path="res://scripts/main.gd" id="1_main"]
 [ext_resource type="Shader" uid="uid://dpl4ehkul47n7" path="res://assets/crt_overlay.gdshader" id="2_crt"]
 [ext_resource type="FontFile" uid="uid://j12f6ndscf7c" path="res://fonts/Noto_Sans_Symbols_2/NotoSansSymbols2-Regular.ttf" id="2_jyhfs"]
-[ext_resource type="Script" uid="uid://dhp8f4hq1y8n1" path="res://scenes/LanguageController.gd" id="2_sugp2"]
+[ext_resource type="Script" uid="uid://dhp8f4hq1y8n1" path="res://scripts/LanguageController.gd" id="2_sugp2"]
 [ext_resource type="Texture2D" uid="uid://hs7koas41j6l" path="res://assets/images/shop-cart-svgrepo-com.svg" id="3_tbgi4"]
-[ext_resource type="Script" uid="uid://cnsygeqi5a5yl" path="res://scenes/shop_content_controller.gd" id="3_tefeu"]
+[ext_resource type="Script" uid="uid://cnsygeqi5a5yl" path="res://scripts/shop_content_controller.gd" id="3_tefeu"]
 [ext_resource type="PackedScene" uid="uid://ns1clnxisnpt" path="res://scenes/ShopItemCard.tscn" id="4_o6xl0"]
-[ext_resource type="Script" uid="uid://b3e527lvnuue2" path="res://scenes/open_shop.gd" id="6_tipki"]
+[ext_resource type="Script" uid="uid://diugn6lt26dji" path="res://scenes/hammer_controller.gd" id="7_choun"]
+[ext_resource type="Script" uid="uid://d4mj6rttfgqd" path="res://scripts/player_class.gd" id="9_85g3d"]
+[ext_resource type="Script" uid="uid://sb6bhn6mfc1s" path="res://scripts/hammer_class.gd" id="10_choun"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_jyhfs"]
 load_path = "res://.godot/imported/whackareport_splashscreen.png-581bcad05f64833ecc7e98c12cd8d0fc.ctex"
@@ -143,7 +145,8 @@ theme_override_constants/outline_size = 6
 theme_override_font_sizes/font_size = 22
 horizontal_alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="UI" unique_id=163100785]
+[node name="BackgroundUI" type="TextureRect" parent="UI" unique_id=163100785]
+unique_name_in_owner = true
 offset_left = -37.0
 offset_top = -192.0
 offset_right = 987.0
@@ -152,7 +155,6 @@ texture = SubResource("CompressedTexture2D_jyhfs")
 
 [node name="MenuPanel" type="PanelContainer" parent="UI" unique_id=1168851832]
 unique_name_in_owner = true
-visible = false
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -275,6 +277,11 @@ theme_override_font_sizes/font_size = 36
 text = "IMPEACHED!"
 horizontal_alignment = 1
 
+[node name="MoneyEarned" type="Label" parent="UI/GameOverPanel/VBox" unique_id=1731216361]
+layout_mode = 2
+text = "Money made : "
+horizontal_alignment = 1
+
 [node name="OverSub" type="Label" parent="UI/GameOverPanel/VBox" unique_id=706459305]
 unique_name_in_owner = true
 layout_mode = 2
@@ -331,6 +338,7 @@ text = "  RUN AGAIN  "
 
 [node name="ShopPanel" type="PanelContainer" parent="UI" unique_id=1033777944]
 unique_name_in_owner = true
+visible = false
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -365,6 +373,20 @@ theme_override_font_sizes/font_size = 25
 text = "    X    "
 icon_alignment = 2
 
+[node name="HBoxContainer2" type="HBoxContainer" parent="UI/ShopPanel/VBox" unique_id=1250653955]
+layout_mode = 2
+
+[node name="Money" type="Label" parent="UI/ShopPanel/VBox/HBoxContainer2" unique_id=703090226]
+layout_mode = 2
+theme_override_font_sizes/font_size = 35
+text = "COINS"
+
+[node name="CoinAmountShop" type="Label" parent="UI/ShopPanel/VBox/HBoxContainer2" unique_id=1366396585]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 35
+text = "0"
+
 [node name="OverTitle" type="Label" parent="UI/ShopPanel/VBox" unique_id=1175950626]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.3, 0.25, 1)
@@ -378,31 +400,69 @@ horizontal_alignment = 1
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ShopItemList" type="VScrollBar" parent="UI/ShopPanel/VBox/ScrollContainer" unique_id=745973543]
+[node name="ShopItemList" type="VBoxContainer" parent="UI/ShopPanel/VBox/ScrollContainer" unique_id=1857688692]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="ShopButton" type="TextureButton" parent="UI" unique_id=1421146962]
 unique_name_in_owner = true
-visible = false
-offset_left = 855.0
-offset_top = 16.999996
-offset_right = 1655.0
-offset_bottom = 817.0
+offset_left = 833.00006
+offset_top = 16.0
+offset_right = 1633.0
+offset_bottom = 816.0
 scale = Vector2(0.1, 0.1)
 offset_transform_scale = Vector2(0.1, 0.1)
+tooltip_text = "SHOP"
 texture_normal = ExtResource("3_tbgi4")
-script = ExtResource("6_tipki")
 
 [node name="LanguageSelect" type="OptionButton" parent="UI" unique_id=1387703254]
 unique_name_in_owner = true
-visible = false
 offset_left = 13.0
-offset_top = 12.0
+offset_top = 584.0
 offset_right = 187.0
-offset_bottom = 61.0
+offset_bottom = 633.0
 alignment = 1
 fit_to_longest_item = false
 script = ExtResource("2_sugp2")
+
+[node name="HammerSelect" type="OptionButton" parent="UI" unique_id=45056102]
+unique_name_in_owner = true
+offset_left = 13.0
+offset_top = 28.0
+offset_right = 187.0
+offset_bottom = 77.0
+alignment = 1
+fit_to_longest_item = false
+script = ExtResource("7_choun")
+
+[node name="CoinsLabelMenu" type="Label" parent="UI" unique_id=1573010341]
+unique_name_in_owner = true
+offset_left = 645.0
+offset_top = 585.0
+offset_right = 778.0
+offset_bottom = 634.0
+theme_override_font_sizes/font_size = 35
+text = "COINS"
+
+[node name="CoinAmountMenu" type="Label" parent="UI" unique_id=395518261]
+unique_name_in_owner = true
+offset_left = 803.0
+offset_top = 585.0
+offset_right = 934.0
+offset_bottom = 635.0
+theme_override_font_sizes/font_size = 35
+text = "1"
+horizontal_alignment = 2
+
+[node name="ShopLabel" type="Label" parent="UI" unique_id=808086592]
+offset_left = 808.0
+offset_top = 95.0
+offset_right = 952.0
+offset_bottom = 150.0
+theme_override_font_sizes/font_size = 35
+text = "SHOP"
+horizontal_alignment = 1
 
 [node name="CRTLayer" type="CanvasLayer" parent="." unique_id=1838840271]
 layer = 99
@@ -415,3 +475,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+
+[node name="PlayerClass" type="Node2D" parent="." unique_id=1186394569]
+script = ExtResource("9_85g3d")
+
+[node name="HammerClass" type="Node2D" parent="." unique_id=252586732]
+script = ExtResource("10_choun")

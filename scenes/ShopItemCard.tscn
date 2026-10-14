@@ -1,38 +1,73 @@
 [gd_scene format=3 uid="uid://ns1clnxisnpt"]
 
-[ext_resource type="Script" uid="uid://br7y1fcmh3dfg" path="res://scenes/shop_item_card.gd" id="1_87dkc"]
+[ext_resource type="Script" uid="uid://br7y1fcmh3dfg" path="res://scripts/shop_item_card.gd" id="1_87dkc"]
 [ext_resource type="Texture2D" uid="uid://drkc4es8dmwtg" path="res://pepicons-pencil--hammer-sledge.png" id="2_mluul"]
 
-[node name="ShopItemCard" type="PanelContainer" unique_id=774700108]
-offset_right = 963.0
-offset_bottom = 642.0
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mluul"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(1, 0.101960786, 0.101960786, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[node name="ItemCard" type="PanelContainer" unique_id=1972178927]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -481.5
+offset_top = -321.0
+offset_right = 481.5
+offset_bottom = -79.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_mluul")
 script = ExtResource("1_87dkc")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=2031365965]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1693605315]
 layout_mode = 2
+size_flags_vertical = 3
 alignment = 1
 
-[node name="ItemPreview" type="TextureRect" parent="HBoxContainer" unique_id=1597151533]
+[node name="ItemPreview" type="TextureRect" parent="HBoxContainer" unique_id=862706261]
+propagate_maximum_size = true
 layout_mode = 2
 texture = ExtResource("2_mluul")
+expand_mode = 2
+stretch_mode = 4
+flip_h = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=1641678778]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=1414403414]
+propagate_maximum_size = false
 layout_mode = 2
+size_flags_horizontal = 2
+theme_override_constants/separation = 20
 alignment = 1
 
-[node name="ItemName" type="Label" parent="HBoxContainer/VBoxContainer" unique_id=1694623644]
+[node name="ItemName" type="Label" parent="HBoxContainer/VBoxContainer" unique_id=1520699383]
+custom_maximum_size = Vector2(319, 322)
+propagate_maximum_size = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0.99215686, 0, 1)
-theme_override_font_sizes/font_size = 70
-text = "ItemName"
-horizontal_alignment = 1
-vertical_alignment = 1
+size_flags_vertical = 1
+text = "Basic Hammer"
 
-[node name="ItemDescription" type="Label" parent="HBoxContainer/VBoxContainer" unique_id=1071496281]
+[node name="ItemDescription" type="Label" parent="HBoxContainer/VBoxContainer" unique_id=1912379713]
+custom_maximum_size = Vector2(319, 322)
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0.99215686, 0, 1)
-text = "- ItemDescription
-- ItemDescription
-- ItemDescription
-ItemDescription- ItemDescription- ItemDescription"
-vertical_alignment = 1
+text = "This is a very strong hammer, it bonks 
+since its invention."
+autowrap_mode = 2
+
+[node name="BuyButton" type="Button" parent="HBoxContainer" unique_id=701950503]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_constants/outline_size = 4
+text = "Buy"
