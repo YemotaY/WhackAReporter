@@ -18,6 +18,11 @@ config/features=PackedStringArray("4.7", "GL Compatibility")
 boot_splash/image="uid://bocuq8peo48nf"
 config/icon="uid://drkc4es8dmwtg"
 
+[autoload]
+
+PlayerClass="*uid://d4mj6rttfgqd"
+HammerClass="*uid://sb6bhn6mfc1s"
+
 [display]
 
 window/size/viewport_width=960
