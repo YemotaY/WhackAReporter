@@ -1,12 +1,18 @@
+class_name ShopController
 extends PanelContainer
 
 @export var item_card_scene: PackedScene
 @export var item_card_height: float = 120.0
+@onready var shop_item_list: VBoxContainer = %ShopItemList
 
-@onready var shop_item_list: VBoxContainer = \
-	$VBox/ScrollContainer/ShopItemList
+func _ready() -> void:
+	return
 
 func populate_shop(items: Array) -> void:
+	
+	push_error("Rebuilding shop: " +str(items))
+	push_error(shop_item_list)
+	
 	for child in shop_item_list.get_children():
 		shop_item_list.remove_child(child)
 		child.queue_free()
