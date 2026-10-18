@@ -1,3 +1,4 @@
+class_name LanguageSelectController
 extends OptionButton
 
 const FLAG_SIZE := Vector2i(24, 16)

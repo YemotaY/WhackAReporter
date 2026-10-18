@@ -21,7 +21,9 @@ config/icon="uid://drkc4es8dmwtg"
 [autoload]
 
 PlayerClass="*uid://d4mj6rttfgqd"
-HammerClass="*uid://sb6bhn6mfc1s"
+LanguageController="*uid://dhp8f4hq1y8n1"
+HammerController="*uid://diugn6lt26dji"
+ShopContentController="*uid://cnsygeqi5a5yl"
 
 [display]
 

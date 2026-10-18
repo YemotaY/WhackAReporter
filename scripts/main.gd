@@ -101,6 +101,7 @@ func _ready() -> void:
 	_refresh_board_labels()
 	_update_hud()
 	
+
 func _refresh_coins():
 	coins_amount_shop.text = str(PlayerClass.money)
 	coins_amount_menu.text = str(PlayerClass.money)
@@ -397,8 +398,17 @@ func open_shop():
 	btn_Open_shop.visible = false
 	menu_panel.visible = false
 	Shop_panel.visible = true
+	var res = []
+	for i in range(0,len(HammerSelectController.new().shop_inventory)):
+		if(HammerSelectController.new().shop_inventory[i] not in PlayerClass.unlocked_hammer):
+			push_error("New shop item" + str(HammerSelectController.new().shop_inventory[i]))
+			res.append(HammerSelectController.new().shop_inventory[i])
 	
-	Shop_panel.populate_shop(HammerClass.shop_inventory)
+	Shop_panel.populate_shop(res)
+
+
+func update_shop(res):
+	Shop_panel.populate_shop(res)
 
 func close_shop():
 	coins_amount_shop.visible = false

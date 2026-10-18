@@ -7,9 +7,8 @@
 [ext_resource type="Texture2D" uid="uid://hs7koas41j6l" path="res://assets/images/shop-cart-svgrepo-com.svg" id="3_tbgi4"]
 [ext_resource type="Script" uid="uid://cnsygeqi5a5yl" path="res://scripts/shop_content_controller.gd" id="3_tefeu"]
 [ext_resource type="PackedScene" uid="uid://ns1clnxisnpt" path="res://scenes/ShopItemCard.tscn" id="4_o6xl0"]
-[ext_resource type="Script" uid="uid://diugn6lt26dji" path="res://scenes/hammer_controller.gd" id="7_choun"]
+[ext_resource type="Script" uid="uid://diugn6lt26dji" path="res://scripts/hammer_controller.gd" id="7_choun"]
 [ext_resource type="Script" uid="uid://d4mj6rttfgqd" path="res://scripts/player_class.gd" id="9_85g3d"]
-[ext_resource type="Script" uid="uid://sb6bhn6mfc1s" path="res://scripts/hammer_class.gd" id="10_choun"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_jyhfs"]
 load_path = "res://.godot/imported/whackareport_splashscreen.png-581bcad05f64833ecc7e98c12cd8d0fc.ctex"
@@ -401,6 +400,7 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="ShopItemList" type="VBoxContainer" parent="UI/ShopPanel/VBox/ScrollContainer" unique_id=1857688692]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -478,6 +478,3 @@ mouse_filter = 2
 
 [node name="PlayerClass" type="Node2D" parent="." unique_id=1186394569]
 script = ExtResource("9_85g3d")
-
-[node name="HammerClass" type="Node2D" parent="." unique_id=252586732]
-script = ExtResource("10_choun")
