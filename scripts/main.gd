@@ -162,6 +162,7 @@ func _build_holes() -> void:
 			hole_base_pos.append(hole.position)
 
 func _start_game_trial() -> void:
+	hammer.swing()
 	score = 0
 	lives = START_LIVES
 	combo = 0
@@ -194,6 +195,7 @@ func replace_hammer(texture):
 	hammer.replace_hammer(texture)
 
 func _start_game() -> void:
+	hammer.swing()
 	score = 0
 	lives = START_LIVES
 	combo = 0
@@ -357,6 +359,9 @@ func _spawn_reporter() -> void:
 	hole.pop_up(0.25, _arcade_hit_window())
 	_play("pop")
 
+func swing_hammer():
+	hammer.swing()
+
 func _unhandled_input(event: InputEvent) -> void:
 	if game_state != GameState.PLAYING:
 		return
@@ -398,6 +403,7 @@ func _on_question_asked(hole: Hole) -> void:
 		_game_over()
 
 func open_shop():
+	hammer.swing()
 	coins_amount_shop.visible = true
 	coins_amount_menu.visible = false
 	hammer_select.visible = false
@@ -417,6 +423,7 @@ func update_shop(res):
 	Shop_panel.populate_shop(res)
 
 func close_shop():
+	hammer.swing()
 	coins_amount_shop.visible = false
 	coins_amount_menu.visible = true
 	hammer_select.visible = true
@@ -485,6 +492,7 @@ func add_leaderboard_entry(entry_name: String, s: int, lvl: int) -> void:
 	_save_leaderboard()
 
 func _submit_score() -> void:
+	hammer.swing()
 	add_leaderboard_entry(name_edit.text, score, level)
 	name_row.visible = false
 	_play("tick")
@@ -545,7 +553,6 @@ func _play(sfx_name: String) -> void:
 	add_child(p)
 	p.finished.connect(p.queue_free)
 	p.play()
-
 
 class BriefingRoomBG extends Node2D:
 	func _draw() -> void:

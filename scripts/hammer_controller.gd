@@ -1,8 +1,9 @@
 class_name HammerSelectController
 extends OptionButton
 
-const FLAG_SIZE := Vector2i(24, 16)
-const FLAG_PADDING_LEFT := 6
+const FLAG_SIZE := Vector2i(64, 64)
+const FLAG_PADDING_LEFT := -64
+const FLAG_PADDING_BOTTOM := -64
 
 @onready var rootNode = get_node("/root/Main")
 
@@ -53,20 +54,19 @@ func load_hammer(path: String) -> Texture2D:
 	# Create a wider transparent image
 	var padded := Image.create(
 		FLAG_SIZE.x + FLAG_PADDING_LEFT,
-		FLAG_SIZE.y,
+		FLAG_SIZE.y + FLAG_PADDING_BOTTOM,
 		false,
 		Image.FORMAT_RGBA8
 	)
 
 	padded.fill(Color.TRANSPARENT)
-
 	# Place the flag with left padding
 	padded.blit_rect(
 		image,
 		Rect2i(0, 0, FLAG_SIZE.x, FLAG_SIZE.y),
 		Vector2i(FLAG_PADDING_LEFT, 0)
 	)
-
+	
 	return ImageTexture.create_from_image(padded)
 
 func _ready():
