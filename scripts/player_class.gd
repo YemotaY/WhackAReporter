@@ -10,11 +10,13 @@ var user_info = collect()
 var lifes = 5;
 var money = 9999;
 var money_multiplier = 1.0;
-var selected_hammer = "Basic_Hammer";
+var selected_hammer = "BASICHAMMER";
 var unlocked_hammer = ["BASICHAMMER"]
 var cheating_detected = false;
 var time_played = 0;
 var iterations = 0;
+
+const SAVE_PATH = "user://player_class_progress.json"
 
 static func collect() -> Dictionary:
 	return {
@@ -24,6 +26,40 @@ static func collect() -> Dictionary:
 		"performance": _get_performance_info(),
 	}
 
+func save_player_progress(player_class: String, level: int, experience: float, unlocked_skills: Array) -> void:
+	var save_data = {
+		"player_class": player_class,
+		"level": level,
+		"experience": experience,
+		"unlocked_skills": unlocked_skills
+	}
+	
+	var file = FileAccess.open(SAVE_PATH, FileAccess.WRITE)
+	if file:
+		var json_string = JSON.stringify(save_data)
+		file.store_string(json_string)
+		file.close()
+	else:
+		push_error("Failed to open save file. Error code: ", FileAccess.get_open_error())
+
+func load_player_progress() -> Dictionary:
+	if not FileAccess.file_exists(SAVE_PATH):
+		print("No save file found. Returning default stats.")
+		return {} # Handle default character creation/stats here
+		
+	var file = FileAccess.open(SAVE_PATH, FileAccess.READ)
+	if file:
+		var json_string = file.get_as_text()
+		file.close()
+		
+		var json = JSON.new()
+		var error = json.parse(json_string)
+		if error == OK:
+			return json.get_data()
+		else:
+			push_error("JSON Parse Error: ", json.get_error_message(), " in ", json_string, " at line ", json.get_error_line())
+			
+	return {}
 
 static func _get_system_info() -> Dictionary:
 	var info := {

@@ -49,7 +49,7 @@ const SYMBOL_FONT := preload(
 	"tick": preload("res://assets/sfx/tick.wav"),
 }
 
-@onready var hammer_select: OptionButton = %HammerSelect
+@onready var hammer_select := %HammerSelect
 @onready var score_label: Label = %ScoreLabel
 @onready var lives_label: Label = %LivesLabel
 @onready var combo_label: Label = %ComboLabel
@@ -70,6 +70,7 @@ const SYMBOL_FONT := preload(
 @onready var language_selection : OptionButton = %LanguageSelect
 @onready var btn_Close_Shop: Button = %ExitShopButton
 @onready var btn_Open_shop: TextureButton = %ShopButton
+@onready var lbl_shop: Label = %ShopLabelMenu
 @onready var Shop_panel: PanelContainer = %ShopPanel
 @onready var background_image: TextureRect = %BackgroundUI
 
@@ -167,12 +168,14 @@ func _start_game_trial() -> void:
 	elapsed = 0.0
 	spawn_timer = 0.6
 	level = 1
-	game_state = GameState.PLAYING
+	lbl_shop.visible = false
+	%ShopButton.visible = false
 	hammer_select.visible = false
 	background_image.visible = false
 	menu_panel.visible = false
 	game_over_panel.visible = false
 	language_selection.visible = false
+	game_state = GameState.PLAYING
 	hole_qa.clear()
 	heard_qa.clear()
 	arcade_mode = true
@@ -187,6 +190,9 @@ func _start_game_trial() -> void:
 	spawn_timer = 6.0
 	_update_hud()
 
+func replace_hammer(texture):
+	hammer.replace_hammer(texture)
+
 func _start_game() -> void:
 	score = 0
 	lives = START_LIVES
@@ -194,13 +200,14 @@ func _start_game() -> void:
 	elapsed = 0.0
 	spawn_timer = 0.6
 	level = 1
-	game_state = GameState.PLAYING
+	lbl_shop.visible = false
 	hammer_select.visible = false
 	background_image.visible = false
 	%ShopButton.visible = false
 	menu_panel.visible = false
 	game_over_panel.visible = false
 	language_selection.visible = false
+	game_state = GameState.PLAYING
 	hole_qa.clear()
 	heard_qa.clear()
 	arcade_mode = false
@@ -401,7 +408,6 @@ func open_shop():
 	var res = []
 	for i in range(0,len(HammerSelectController.new().shop_inventory)):
 		if(HammerSelectController.new().shop_inventory[i] not in PlayerClass.unlocked_hammer):
-			push_error("New shop item" + str(HammerSelectController.new().shop_inventory[i]))
 			res.append(HammerSelectController.new().shop_inventory[i])
 	
 	Shop_panel.populate_shop(res)
@@ -418,6 +424,7 @@ func close_shop():
 	btn_Open_shop.visible = true
 	menu_panel.visible = true
 	Shop_panel.visible = false
+	hammer_select._refresh()
 
 func _game_over() -> void:
 	game_state = GameState.GAME_OVER

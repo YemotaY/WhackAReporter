@@ -10,8 +10,8 @@ func _ready() -> void:
 
 func populate_shop(items: Array) -> void:
 	
-	push_error("Rebuilding shop: " +str(items))
-	push_error(shop_item_list)
+	#push_error("Rebuilding shop: " +str(items))
+	#push_error(shop_item_list)
 	
 	for child in shop_item_list.get_children():
 		shop_item_list.remove_child(child)

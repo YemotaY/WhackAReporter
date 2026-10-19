@@ -21,15 +21,11 @@ config/icon="uid://drkc4es8dmwtg"
 [autoload]
 
 PlayerClass="*uid://d4mj6rttfgqd"
-LanguageController="*uid://dhp8f4hq1y8n1"
-HammerController="*uid://diugn6lt26dji"
-ShopContentController="*uid://cnsygeqi5a5yl"
 
 [display]
 
 window/size/viewport_width=960
 window/size/viewport_height=640
-window/size/mode=3
 window/stretch/mode="canvas_items"
 
 [editor_plugins]
